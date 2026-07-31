@@ -1,0 +1,6 @@
+{
+  "name": "Hirna RVL Data Analytics Dashboard",
+  "description": "Production-ready veterinary disease surveillance and epidemiological analytics dashboard for the Hirna Regional Veterinary Diagnostic Laboratory (HRVL) covering East & West Hararghe Zones, Oromia, Ethiopia.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

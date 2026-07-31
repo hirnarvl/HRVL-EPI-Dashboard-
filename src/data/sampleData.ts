@@ -1,0 +1,459 @@
+import { SurveillanceRecord, Outbreak, WoredaCompliance, DiseaseSummary } from '../types';
+import { HARARGHE_WOREDAS } from './woredas';
+
+// Initial realistic surveillance dataset
+export const INITIAL_SURVEILLANCE_RECORDS: SurveillanceRecord[] = [
+  {
+    id: 'SR-2026-001',
+    date: '2026-07-28',
+    timestamp: new Date('2026-07-28T09:30:00').getTime(),
+    woreda: 'Haramaya',
+    zone: 'East Hararghe',
+    lat: 9.4123,
+    lng: 42.0123,
+    disease: 'Foot-and-Mouth Disease (FMD)',
+    species: 'Cattle',
+    cases: 42,
+    deaths: 3,
+    risk: 'High',
+    comment: 'Outbreak reported near Harar market corridor. Salivation & foot lesions present.',
+    reporter: 'Vet Dr. Mohammed',
+    phone: '+251915443322'
+  },
+  {
+    id: 'SR-2026-002',
+    date: '2026-07-27',
+    timestamp: new Date('2026-07-27T14:15:00').getTime(),
+    woreda: 'Chiro',
+    zone: 'West Hararghe',
+    lat: 9.0812,
+    lng: 40.8712,
+    disease: 'Lumpy Skin Disease (LSD)',
+    species: 'Cattle',
+    cases: 28,
+    deaths: 2,
+    risk: 'Medium',
+    comment: 'Skin nodules observed in 4 kebeles. Ring vaccination recommended.',
+    reporter: 'Vet Tech Fatuma',
+    phone: '+251912556677'
+  },
+  {
+    id: 'SR-2026-003',
+    date: '2026-07-26',
+    timestamp: new Date('2026-07-26T11:00:00').getTime(),
+    woreda: 'Dadar',
+    zone: 'East Hararghe',
+    lat: 9.3214,
+    lng: 41.4523,
+    disease: 'Peste des Petits Ruminants (PPR)',
+    species: 'Goats',
+    cases: 65,
+    deaths: 12,
+    risk: 'Critical',
+    comment: 'High mortality in goat herds. Diarrhea and nasal discharge.',
+    reporter: 'Officer Ahmed',
+    phone: '+251933112244'
+  },
+  {
+    id: 'SR-2026-004',
+    date: '2026-07-25',
+    timestamp: new Date('2026-07-25T16:45:00').getTime(),
+    woreda: 'Daro Lebu',
+    zone: 'West Hararghe',
+    lat: 8.6012,
+    lng: 40.3012,
+    disease: 'Contagious Bovine Pleuropneumonia (CBPP)',
+    species: 'Cattle',
+    cases: 19,
+    deaths: 5,
+    risk: 'High',
+    comment: 'Respiratory distress in pastoral cattle herds. Quarantine initiated.',
+    reporter: 'Vet Dr. Bekele',
+    phone: '+251944551100'
+  },
+  {
+    id: 'SR-2026-005',
+    date: '2026-07-25',
+    timestamp: new Date('2026-07-25T10:20:00').getTime(),
+    woreda: 'Babile',
+    zone: 'East Hararghe',
+    lat: 9.2312,
+    lng: 42.3321,
+    disease: 'African Horse Sickness (AHS)',
+    species: 'Equines',
+    cases: 14,
+    deaths: 8,
+    risk: 'High',
+    comment: 'Acute swelling of supraorbital fossa in donkeys and horses.',
+    reporter: 'Officer Ibrahim',
+    phone: '+251915998877'
+  },
+  {
+    id: 'SR-2026-006',
+    date: '2026-07-24',
+    timestamp: new Date('2026-07-24T08:00:00').getTime(),
+    woreda: 'Habro',
+    zone: 'West Hararghe',
+    lat: 8.8212,
+    lng: 40.5312,
+    disease: 'Anthrax',
+    species: 'Cattle',
+    cases: 6,
+    deaths: 6,
+    risk: 'Critical',
+    comment: 'Sudden death with unclotted blood discharge. Carcass buried safely.',
+    reporter: 'Dr. Chala',
+    phone: '+251922334455'
+  },
+  {
+    id: 'SR-2026-007',
+    date: '2026-07-23',
+    timestamp: new Date('2026-07-23T13:30:00').getTime(),
+    woreda: 'Girawa',
+    zone: 'East Hararghe',
+    lat: 9.1342,
+    lng: 41.8312,
+    disease: 'Newcastle Disease (ND)',
+    species: 'Poultry',
+    cases: 150,
+    deaths: 98,
+    risk: 'High',
+    comment: 'Mass backyard poultry deaths reported in 2 pastoral kebeles.',
+    reporter: 'Vet Tech Roba',
+    phone: '+251911223344'
+  },
+  {
+    id: 'SR-2026-008',
+    date: '2026-07-22',
+    timestamp: new Date('2026-07-22T15:10:00').getTime(),
+    woreda: 'Mieso',
+    zone: 'West Hararghe',
+    lat: 9.2312,
+    lng: 40.7512,
+    disease: 'Peste des Petits Ruminants (PPR)',
+    species: 'Sheep',
+    cases: 38,
+    deaths: 7,
+    risk: 'Medium',
+    comment: 'Transboundary movement along Djibouti road transport axis.',
+    reporter: 'Officer Hassan',
+    phone: '+251955667788'
+  },
+  {
+    id: 'SR-2026-009',
+    date: '2026-07-21',
+    timestamp: new Date('2026-07-21T09:00:00').getTime(),
+    woreda: 'Badeno',
+    zone: 'East Hararghe',
+    lat: 8.9045,
+    lng: 41.6312,
+    disease: 'Lumpy Skin Disease (LSD)',
+    species: 'Cattle',
+    cases: 15,
+    deaths: 1,
+    risk: 'Low',
+    comment: 'Routine surveillance check. Vector control measures advised.',
+    reporter: 'Vet Dr. Mohammed',
+    phone: '+251915443322'
+  },
+  {
+    id: 'SR-2026-010',
+    date: '2026-07-20',
+    timestamp: new Date('2026-07-20T11:20:00').getTime(),
+    woreda: 'Goba Koricha',
+    zone: 'West Hararghe',
+    lat: 8.7812,
+    lng: 40.1512,
+    disease: 'Rabies',
+    species: 'Swine / Others',
+    cases: 3,
+    deaths: 3,
+    risk: 'High',
+    comment: 'Stray dog bites reported in domestic animals & 1 shepherd.',
+    reporter: 'Officer Gemechu',
+    phone: '+251977889900'
+  },
+  // Zero report examples
+  {
+    id: 'SR-2026-011',
+    date: '2026-07-28',
+    timestamp: new Date('2026-07-28T08:00:00').getTime(),
+    woreda: 'Kombolcha',
+    zone: 'East Hararghe',
+    lat: 9.4312,
+    lng: 42.1234,
+    disease: 'None (Zero Reporting)',
+    species: 'Cattle',
+    cases: 0,
+    deaths: 0,
+    risk: 'Low',
+    comment: 'Weekly zero report submitted. No outbreak indicators.',
+    isZeroReport: true
+  },
+  {
+    id: 'SR-2026-012',
+    date: '2026-07-28',
+    timestamp: new Date('2026-07-28T08:30:00').getTime(),
+    woreda: 'Tulo',
+    zone: 'West Hararghe',
+    lat: 9.1812,
+    lng: 41.0212,
+    disease: 'None (Zero Reporting)',
+    species: 'Goats',
+    cases: 0,
+    deaths: 0,
+    risk: 'Low',
+    comment: 'Zero reporting compliance active.',
+    isZeroReport: true
+  }
+];
+
+export const INITIAL_OUTBREAKS: Outbreak[] = [
+  {
+    id: 'OB-2026-01',
+    outbreakCode: 'HRVL-OB-FMD-01',
+    disease: 'Foot-and-Mouth Disease (FMD)',
+    zone: 'East Hararghe',
+    woreda: 'Haramaya',
+    startDate: '2026-07-15',
+    status: 'Active',
+    cases: 142,
+    deaths: 9,
+    susceptible: 2800,
+    morbidityRate: 5.07,
+    mortalityRate: 0.32,
+    cfr: 6.34,
+    lat: 9.4123,
+    lng: 42.0123,
+    speciesAffected: ['Cattle', 'Sheep'],
+    quarantineApplied: true,
+    vaccinationActive: true
+  },
+  {
+    id: 'OB-2026-02',
+    outbreakCode: 'HRVL-OB-PPR-02',
+    disease: 'Peste des Petits Ruminants (PPR)',
+    zone: 'East Hararghe',
+    woreda: 'Dadar',
+    startDate: '2026-07-18',
+    status: 'Active',
+    cases: 185,
+    deaths: 32,
+    susceptible: 1450,
+    morbidityRate: 12.76,
+    mortalityRate: 2.21,
+    cfr: 17.30,
+    lat: 9.3214,
+    lng: 41.4523,
+    speciesAffected: ['Goats', 'Sheep'],
+    quarantineApplied: true,
+    vaccinationActive: false
+  },
+  {
+    id: 'OB-2026-03',
+    outbreakCode: 'HRVL-OB-LSD-03',
+    disease: 'Lumpy Skin Disease (LSD)',
+    zone: 'West Hararghe',
+    woreda: 'Chiro',
+    startDate: '2026-07-10',
+    status: 'Under Investigation',
+    cases: 64,
+    deaths: 4,
+    susceptible: 1900,
+    morbidityRate: 3.37,
+    mortalityRate: 0.21,
+    cfr: 6.25,
+    lat: 9.0812,
+    lng: 40.8712,
+    speciesAffected: ['Cattle'],
+    quarantineApplied: false,
+    vaccinationActive: true
+  },
+  {
+    id: 'OB-2026-04',
+    outbreakCode: 'HRVL-OB-CBPP-04',
+    disease: 'Contagious Bovine Pleuropneumonia (CBPP)',
+    zone: 'West Hararghe',
+    woreda: 'Daro Lebu',
+    startDate: '2026-07-08',
+    status: 'Active',
+    cases: 48,
+    deaths: 11,
+    susceptible: 820,
+    morbidityRate: 5.85,
+    mortalityRate: 1.34,
+    cfr: 22.92,
+    lat: 8.6012,
+    lng: 40.3012,
+    speciesAffected: ['Cattle'],
+    quarantineApplied: true,
+    vaccinationActive: false
+  },
+  {
+    id: 'OB-2026-05',
+    outbreakCode: 'HRVL-OB-AHS-05',
+    disease: 'African Horse Sickness (AHS)',
+    zone: 'East Hararghe',
+    woreda: 'Babile',
+    startDate: '2026-07-12',
+    status: 'Contained',
+    cases: 23,
+    deaths: 15,
+    susceptible: 310,
+    morbidityRate: 7.42,
+    mortalityRate: 4.84,
+    cfr: 65.22,
+    lat: 9.2312,
+    lng: 42.3321,
+    speciesAffected: ['Equines'],
+    quarantineApplied: true,
+    vaccinationActive: true
+  },
+  {
+    id: 'OB-2026-06',
+    outbreakCode: 'HRVL-OB-ANTH-06',
+    disease: 'Anthrax',
+    zone: 'West Hararghe',
+    woreda: 'Habro',
+    startDate: '2026-07-22',
+    status: 'Active',
+    cases: 9,
+    deaths: 9,
+    susceptible: 450,
+    morbidityRate: 2.00,
+    mortalityRate: 2.00,
+    cfr: 100.0,
+    lat: 8.8212,
+    lng: 40.5312,
+    speciesAffected: ['Cattle'],
+    quarantineApplied: true,
+    vaccinationActive: true
+  }
+];
+
+export function generateInitialCompliance(): WoredaCompliance[] {
+  return HARARGHE_WOREDAS.map(w => {
+    // Generate realistic historical reporting metrics
+    const expected = 12; // 12 weekly reports per quarter expected
+    let actual = 10;
+    if (['Haramaya', 'Chiro', 'Dadar', 'Babile', 'Kersa', 'Doba'].includes(w.name)) {
+      actual = 12;
+    } else if (['Kumbi', 'Meyu Muluke', 'Burqa Dhintu', 'Hawwi Gudina', 'Guba Koricha'].includes(w.name)) {
+      actual = 5;
+    } else {
+      actual = Math.floor(Math.random() * 4) + 8;
+    }
+    const rate = Math.round((actual / expected) * 100);
+    return {
+      woreda: w.name,
+      zone: w.zone,
+      expectedReports: expected,
+      actualReports: actual,
+      complianceRate: rate,
+      lastReportDate: rate > 80 ? '2026-07-28' : rate > 50 ? '2026-07-20' : '2026-07-05',
+      status: rate >= 80 ? 'Compliant' : rate >= 60 ? 'Needs Attention' : 'Non-Compliant'
+    };
+  });
+}
+
+// Disease Overview summary metrics
+export const DISEASE_SUMMARIES: DiseaseSummary[] = [
+  {
+    disease: 'Foot-and-Mouth Disease (FMD)',
+    totalOutbreaks: 5,
+    totalCases: 342,
+    totalDeaths: 18,
+    morbidityPercent: 8.4,
+    cfrPercent: 5.26,
+    activeWoredasCount: 6,
+    primarySpecies: 'Cattle & Sheep',
+    riskLevel: 'High'
+  },
+  {
+    disease: 'Peste des Petits Ruminants (PPR)',
+    totalOutbreaks: 4,
+    totalCases: 410,
+    totalDeaths: 64,
+    morbidityPercent: 14.2,
+    cfrPercent: 15.61,
+    activeWoredasCount: 8,
+    primarySpecies: 'Goats & Sheep',
+    riskLevel: 'Critical'
+  },
+  {
+    disease: 'Lumpy Skin Disease (LSD)',
+    totalOutbreaks: 3,
+    totalCases: 198,
+    totalDeaths: 12,
+    morbidityPercent: 4.8,
+    cfrPercent: 6.06,
+    activeWoredasCount: 5,
+    primarySpecies: 'Cattle',
+    riskLevel: 'Medium'
+  },
+  {
+    disease: 'Contagious Bovine Pleuropneumonia (CBPP)',
+    totalOutbreaks: 2,
+    totalCases: 89,
+    totalDeaths: 21,
+    morbidityPercent: 6.1,
+    cfrPercent: 23.60,
+    activeWoredasCount: 3,
+    primarySpecies: 'Cattle',
+    riskLevel: 'High'
+  },
+  {
+    disease: 'African Horse Sickness (AHS)',
+    totalOutbreaks: 2,
+    totalCases: 42,
+    totalDeaths: 27,
+    morbidityPercent: 9.2,
+    cfrPercent: 64.29,
+    activeWoredasCount: 2,
+    primarySpecies: 'Equines',
+    riskLevel: 'High'
+  },
+  {
+    disease: 'Anthrax',
+    totalOutbreaks: 1,
+    totalCases: 14,
+    totalDeaths: 14,
+    morbidityPercent: 1.8,
+    cfrPercent: 100.0,
+    activeWoredasCount: 1,
+    primarySpecies: 'Cattle',
+    riskLevel: 'Critical'
+  },
+  {
+    disease: 'Newcastle Disease (ND)',
+    totalOutbreaks: 3,
+    totalCases: 520,
+    totalDeaths: 340,
+    morbidityPercent: 32.5,
+    cfrPercent: 65.38,
+    activeWoredasCount: 4,
+    primarySpecies: 'Poultry',
+    riskLevel: 'High'
+  }
+];
+
+// Species Proportions for Donut Chart
+export const SPECIES_DISTRIBUTION = [
+  { name: 'Cattle', cases: 685, color: '#2563eb' },
+  { name: 'Goats', cases: 425, color: '#16a34a' },
+  { name: 'Sheep', cases: 310, color: '#eab308' },
+  { name: 'Poultry', cases: 520, color: '#f97316' },
+  { name: 'Equines', cases: 68, color: '#8b5cf6' },
+  { name: 'Camels', cases: 45, color: '#06b6d4' },
+  { name: 'Swine / Others', cases: 18, color: '#ec4899' }
+];
+
+// CFR Trend line chart data across 6 months
+export const CFR_TREND_DATA = [
+  { month: 'Feb', FMD: 4.1, LSD: 5.2, PPR: 12.4, CBPP: 20.1, Anthrax: 100.0 },
+  { month: 'Mar', FMD: 4.8, LSD: 5.9, PPR: 13.8, CBPP: 21.5, Anthrax: 100.0 },
+  { month: 'Apr', FMD: 5.5, LSD: 6.4, PPR: 15.2, CBPP: 22.0, Anthrax: 100.0 },
+  { month: 'May', FMD: 5.1, LSD: 5.8, PPR: 14.9, CBPP: 24.1, Anthrax: 100.0 },
+  { month: 'Jun', FMD: 5.9, LSD: 6.2, PPR: 16.5, CBPP: 23.5, Anthrax: 100.0 },
+  { month: 'Jul', FMD: 5.26, LSD: 6.06, PPR: 15.61, CBPP: 23.60, Anthrax: 100.0 },
+];
