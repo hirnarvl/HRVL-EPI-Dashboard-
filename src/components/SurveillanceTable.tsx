@@ -9,7 +9,7 @@ interface SurveillanceTableProps {
 
 export const SurveillanceTable: React.FC<SurveillanceTableProps> = ({ records }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [zoneFilter, setZoneFilter] = useState<'All' | 'East Hararghe' | 'West Hararghe'>('All');
+  const [zoneFilter, setZoneFilter] = useState<'All' | 'E/H' | 'W/H'>('All');
   const [sortField, setSortField] = useState<keyof SurveillanceRecord>('date');
   const [sortAsc, setSortAsc] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -64,7 +64,7 @@ export const SurveillanceTable: React.FC<SurveillanceTableProps> = ({ records })
             Field Surveillance Records & Arrival Log
           </h3>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Individual telemetry entries logged across East & West Hararghe
+            Individual telemetry entries logged across E/H & W/H
           </p>
         </div>
 
@@ -79,8 +79,8 @@ export const SurveillanceTable: React.FC<SurveillanceTableProps> = ({ records })
               className="bg-transparent text-xs font-medium text-slate-700 dark:text-slate-200 focus:outline-none pr-2 cursor-pointer"
             >
               <option value="All">All Zones</option>
-              <option value="East Hararghe">East Hararghe</option>
-              <option value="West Hararghe">West Hararghe</option>
+              <option value="E/H">E/H</option>
+              <option value="W/H">W/H</option>
             </select>
           </div>
 
@@ -164,7 +164,7 @@ export const SurveillanceTable: React.FC<SurveillanceTableProps> = ({ records })
                 </td>
                 <td className="py-2.5 px-3">
                   <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
-                    rec.zone === 'East Hararghe'
+                    rec.zone === 'E/H'
                       ? 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300'
                       : 'bg-teal-100 text-teal-800 dark:bg-teal-950 dark:text-teal-300'
                   }`}>

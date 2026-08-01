@@ -114,13 +114,13 @@ export const NewArrivalModal: React.FC<NewArrivalModalProps> = ({
                 onChange={e => setWoredaName(e.target.value)}
                 className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-medium focus:outline-none cursor-pointer"
               >
-                <optgroup label="East Hararghe (21 Woredas)">
-                  {HARARGHE_WOREDAS.filter(w => w.zone === 'East Hararghe').map(w => (
+                <optgroup label="E/H (21 Woredas)">
+                  {HARARGHE_WOREDAS.filter(w => w.zone === 'E/H').map(w => (
                     <option key={w.id} value={w.name}>{w.name}</option>
                   ))}
                 </optgroup>
-                <optgroup label="West Hararghe (15 Woredas)">
-                  {HARARGHE_WOREDAS.filter(w => w.zone === 'West Hararghe').map(w => (
+                <optgroup label="W/H (15 Woredas)">
+                  {HARARGHE_WOREDAS.filter(w => w.zone === 'W/H').map(w => (
                     <option key={w.id} value={w.name}>{w.name}</option>
                   ))}
                 </optgroup>

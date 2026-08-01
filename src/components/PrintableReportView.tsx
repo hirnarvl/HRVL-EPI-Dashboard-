@@ -1,6 +1,7 @@
 import React from 'react';
 import { Activity, Printer, Download, ShieldCheck, MapPin, ArrowLeft } from 'lucide-react';
 import { NarrativeReport, Outbreak, SurveillanceRecord } from '../types';
+import { WoredaReportMap } from './WoredaReportMap';
 
 interface PrintableReportViewProps {
   report: NarrativeReport;
@@ -53,8 +54,8 @@ export const PrintableReportView: React.FC<PrintableReportViewProps> = ({
         {/* Document Header Seal */}
         <div className="flex items-center justify-between border-b-2 border-emerald-800 pb-6 mb-8">
           <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 rounded-full bg-emerald-900 text-white flex items-center justify-center font-bold text-2xl shadow-md border-2 border-emerald-600 shrink-0">
-              HRVL
+            <div className="w-16 h-16 rounded-xl bg-slate-900 text-white flex items-center justify-center p-1.5 shadow-md border-2 border-emerald-700 shrink-0">
+              <img src="/hrvl-emblem.png" alt="HRVL Emblem" className="w-full h-full object-contain" />
             </div>
             <div>
               <h1 className="text-xl font-black text-emerald-950 tracking-tight uppercase">
@@ -64,7 +65,7 @@ export const PrintableReportView: React.FC<PrintableReportViewProps> = ({
                 Oromia Agricultural Bureau • Disease Surveillance & Epidemiology Division
               </h2>
               <p className="text-[11px] text-slate-500 font-sans mt-0.5">
-                Operational Area: East Hararghe (21 Woredas) & West Hararghe (15 Woredas)
+                Operational Area: E/H (21 Woredas) & W/H (15 Woredas)
               </p>
             </div>
           </div>
@@ -156,6 +157,9 @@ export const PrintableReportView: React.FC<PrintableReportViewProps> = ({
               </tbody>
             </table>
           </div>
+
+          {/* Woreda-level Map Overlay */}
+          <WoredaReportMap records={records} outbreaks={outbreaks} isPrintMode={true} />
         </div>
 
         {/* Section 3: Species Vulnerability & Zonal Compliance */}
@@ -201,8 +205,8 @@ export const PrintableReportView: React.FC<PrintableReportViewProps> = ({
         <div className="font-sans pt-8 border-t-2 border-slate-300 grid grid-cols-2 gap-8 text-xs">
           <div>
             <span className="font-bold text-slate-900 block">Report Compiled By:</span>
-            <p className="mt-6 text-slate-700 font-bold">Dr. Mohammed Abdullahi, DVM, MSc</p>
-            <p className="text-slate-500 text-[11px]">Senior Veterinary Epidemiologist, HRVL</p>
+            <p className="mt-6 text-slate-700 font-bold">Epidemiology unit of HRVL</p>
+            <p className="text-slate-500 text-[11px]">Hirna Regional Veterinary Laboratory</p>
           </div>
 
           <div className="text-right">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Activity, 
   PlusCircle, 
@@ -11,9 +11,12 @@ import {
   Filter,
   ShieldCheck,
   Building2,
-  Printer
+  Printer,
+  Volume2,
+  VolumeX
 } from 'lucide-react';
 import { FilterState, ZoneName } from '../types';
+import { soundEngine } from '../utils/sound';
 
 interface NavbarProps {
   darkMode: boolean;
@@ -44,6 +47,14 @@ export const Navbar: React.FC<NavbarProps> = ({
   onTogglePrintMode,
   isPrintFriendlyMode
 }) => {
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(soundEngine.enabled);
+
+  const toggleSound = () => {
+    const next = !soundEnabled;
+    soundEngine.enabled = next;
+    setSoundEnabled(next);
+    if (next) soundEngine.playBlip();
+  };
   return (
     <header className="sticky top-0 z-40 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -51,8 +62,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           
           {/* Brand & Logo */}
           <div className="flex items-center space-x-3">
-            <div className="h-11 w-11 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-600 to-cyan-600 flex items-center justify-center text-white shadow-md shadow-emerald-600/20 shrink-0">
-              <Activity className="w-6 h-6 animate-pulse" />
+            <div className="h-11 w-11 rounded-xl bg-slate-900 border border-emerald-500/50 p-1 flex items-center justify-center shadow-md shadow-emerald-600/20 shrink-0">
+              <img 
+                src="/hrvl-emblem.png" 
+                alt="HRVL Emblem" 
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (!target.src.includes('lh3.googleusercontent.com')) {
+                    target.src = 'https://lh3.googleusercontent.com/d/1i0X8Bpdb5uoX0hP0pfbPOnzJXbymF_Oq';
+                  }
+                }}
+                className="w-full h-full object-contain" 
+              />
             </div>
             <div>
               <div className="flex items-center space-x-2">
@@ -77,18 +98,24 @@ export const Navbar: React.FC<NavbarProps> = ({
               <select
                 aria-label="Filter by Zone"
                 value={filters.zone}
-                onChange={(e) => setFilters(prev => ({ ...prev, zone: e.target.value as any }))}
+                onChange={(e) => {
+                  soundEngine.playClick();
+                  setFilters(prev => ({ ...prev, zone: e.target.value as any }));
+                }}
                 className="bg-transparent text-xs font-medium text-slate-700 dark:text-slate-200 focus:outline-none pr-2 cursor-pointer"
               >
                 <option value="All" className="dark:bg-slate-900">All Zones (36 Woredas)</option>
-                <option value="East Hararghe" className="dark:bg-slate-900">East Hararghe (21)</option>
-                <option value="West Hararghe" className="dark:bg-slate-900">West Hararghe (15)</option>
+                <option value="E/H" className="dark:bg-slate-900">E/H (21)</option>
+                <option value="W/H" className="dark:bg-slate-900">W/H (15)</option>
               </select>
             </div>
 
             {/* Action Buttons */}
             <button
-              onClick={onOpenLogModal}
+              onClick={() => {
+                soundEngine.playClick();
+                onOpenLogModal();
+              }}
               className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 rounded-lg shadow-xs transition-colors cursor-pointer"
             >
               <PlusCircle className="w-4 h-4" />
@@ -96,7 +123,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <button
-              onClick={onToggleSimulator}
+              onClick={() => {
+                soundEngine.playBlip();
+                onToggleSimulator();
+              }}
               className={`inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-colors cursor-pointer ${
                 isSimulatorRunning
                   ? 'bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-950/80 dark:text-amber-300 dark:border-amber-700 animate-pulse'
@@ -108,7 +138,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <button
-              onClick={onOpenImportModal}
+              onClick={() => {
+                soundEngine.playClick();
+                onOpenImportModal();
+              }}
               className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-750 rounded-lg border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
             >
               <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
@@ -116,7 +149,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <button
-              onClick={onExportAllCSV}
+              onClick={() => {
+                soundEngine.playSuccess();
+                onExportAllCSV();
+              }}
               className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-750 rounded-lg border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
             >
               <Download className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
@@ -124,7 +160,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <button
-              onClick={onOpenReportModal}
+              onClick={() => {
+                soundEngine.playClick();
+                onOpenReportModal();
+              }}
               className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 rounded-lg shadow-xs transition-all cursor-pointer"
             >
               <FileText className="w-3.5 h-3.5" />
@@ -133,7 +172,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Field Print Snapshot Toggle Button */}
             <button
-              onClick={onTogglePrintMode}
+              onClick={() => {
+                soundEngine.playClick();
+                onTogglePrintMode();
+              }}
               className={`inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
                 isPrintFriendlyMode
                   ? 'bg-amber-500 text-slate-950 border-amber-600 shadow-md font-extrabold animate-pulse'
@@ -144,9 +186,26 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span>{isPrintFriendlyMode ? '🖨️ Exit Print View' : '🖨️ Field Print Snapshot'}</span>
             </button>
 
+            {/* Acoustic Telemetry Sound Switch */}
+            <button
+              onClick={toggleSound}
+              aria-label="Toggle acoustic telemetry sound effects"
+              title={soundEnabled ? 'Acoustic Telemetry Audio: ON' : 'Acoustic Telemetry Audio: MUTED'}
+              className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
+                soundEnabled 
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800'
+                  : 'bg-slate-100 text-slate-400 border-slate-200 dark:bg-slate-800 dark:text-slate-500 dark:border-slate-700'
+              }`}
+            >
+              {soundEnabled ? <Volume2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> : <VolumeX className="w-4 h-4 text-slate-400" />}
+            </button>
+
             {/* Dark / Light Toggle */}
             <button
-              onClick={() => setDarkMode((prev: boolean) => !prev)}
+              onClick={() => {
+                soundEngine.playClick();
+                setDarkMode((prev: boolean) => !prev);
+              }}
               aria-label="Toggle theme"
               className="p-1.5 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
             >

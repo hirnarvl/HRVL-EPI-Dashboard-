@@ -99,7 +99,7 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
       date: dateStr,
       timestamp: new Date(dateStr).getTime(),
       woreda: simWoreda,
-      zone: ['Haramaya', 'Babile', 'Dadar', 'Badeno'].includes(simWoreda) ? 'East Hararghe' : 'West Hararghe',
+      zone: ['Haramaya', 'Babile', 'Dadar', 'Badeno'].includes(simWoreda) ? 'E/H' : 'W/H',
       disease: 'Foot-and-Mouth Disease (FMD)',
       species: 'Cattle',
       cases: Number(simCases) || 10,

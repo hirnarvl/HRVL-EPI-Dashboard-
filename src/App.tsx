@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
 import { Printer, X, ShieldCheck, FileText, Check, Activity, Building2 } from 'lucide-react';
 import { Navbar } from './components/Navbar';
 import { KPICards } from './components/KPICards';
@@ -15,6 +16,7 @@ import { DiseaseSummaryTable } from './components/DiseaseSummaryTable';
 import { OutbreakTable } from './components/OutbreakTable';
 import { SurveillanceTable } from './components/SurveillanceTable';
 import { ComplianceTable } from './components/ComplianceTable';
+import { FooterBanner } from './components/FooterBanner';
 import { NewArrivalModal } from './components/NewArrivalModal';
 import { ExcelImportModal } from './components/ExcelImportModal';
 import { AIReportModal } from './components/AIReportModal';
@@ -135,7 +137,7 @@ export default function App() {
       date: rec.date || new Date().toISOString().split('T')[0],
       timestamp: rec.timestamp || Date.now(),
       woreda: rec.woreda || 'Haramaya',
-      zone: rec.zone || 'East Hararghe',
+      zone: rec.zone || 'E/H',
       lat: rec.lat || 9.4123,
       lng: rec.lng || 42.0123,
       disease: rec.disease || 'Foot-and-Mouth Disease (FMD)',
@@ -282,52 +284,108 @@ export default function App() {
             </div>
 
             <p className="text-xs text-slate-700 leading-relaxed font-serif italic">
-              Official surveillance snapshot summary prepared for regional field veterinary officer consultations across East Hararghe (21 Woredas) & West Hararghe (15 Woredas). Includes active outbreak hot-spots, CFR trends, and woreda zero-reporting compliance status.
+              Official surveillance snapshot summary prepared for regional field veterinary officer consultations across E/H (21 Woredas) & W/H (15 Woredas). Includes active outbreak hot-spots, CFR trends, and woreda zero-reporting compliance status.
             </p>
           </div>
         )}
 
         {/* KPI Cards & Zone Reporting Rates */}
-        <KPICards
-          records={filteredRecords}
-          outbreaks={outbreaks}
-          complianceList={complianceList}
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+        >
+          <KPICards
+            records={filteredRecords}
+            outbreaks={outbreaks}
+            complianceList={complianceList}
+          />
+        </motion.div>
 
         {/* Interactive Outbreak Map */}
-        <OutbreakMap
-          outbreaks={outbreaks}
-          records={filteredRecords}
-          darkMode={isPrintFriendlyMode ? false : darkMode}
-          selectedZone={filters.zone}
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.15, ease: 'easeOut' }}
+        >
+          <OutbreakMap
+            outbreaks={outbreaks}
+            records={filteredRecords}
+            darkMode={isPrintFriendlyMode ? false : darkMode}
+            selectedZone={filters.zone}
+          />
+        </motion.div>
 
         {/* Reporting Trend Charts & Profile Simulator */}
-        <TrendCharts
-          records={filteredRecords}
-          darkMode={isPrintFriendlyMode ? false : darkMode}
-          onAddLogArrival={handleAddLogArrival}
-          isSimulatorRunning={isSimulatorRunning}
-          onToggleSimulator={() => setIsSimulatorRunning(prev => !prev)}
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.25, ease: 'easeOut' }}
+        >
+          <TrendCharts
+            records={filteredRecords}
+            darkMode={isPrintFriendlyMode ? false : darkMode}
+            onAddLogArrival={handleAddLogArrival}
+            isSimulatorRunning={isSimulatorRunning}
+            onToggleSimulator={() => setIsSimulatorRunning(prev => !prev)}
+          />
+        </motion.div>
 
         {/* 2-Column Section: Species Donut Chart + CFR Trend Line Chart */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <SpeciesDonutChart darkMode={isPrintFriendlyMode ? false : darkMode} />
-          <CFRTrendChart darkMode={isPrintFriendlyMode ? false : darkMode} />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.35, ease: 'easeOut' }}
+          >
+            <SpeciesDonutChart darkMode={isPrintFriendlyMode ? false : darkMode} />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.4, ease: 'easeOut' }}
+          >
+            <CFRTrendChart darkMode={isPrintFriendlyMode ? false : darkMode} />
+          </motion.div>
         </div>
 
         {/* Disease Summary & Outbreak Tables */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <DiseaseSummaryTable summaries={diseaseSummaries} />
-          <OutbreakTable outbreaks={outbreaks} />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.45, ease: 'easeOut' }}
+          >
+            <DiseaseSummaryTable summaries={diseaseSummaries} />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.5, ease: 'easeOut' }}
+          >
+            <OutbreakTable outbreaks={outbreaks} />
+          </motion.div>
         </div>
 
         {/* Field Surveillance Log Table */}
-        <SurveillanceTable records={filteredRecords} />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.55, ease: 'easeOut' }}
+        >
+          <SurveillanceTable records={filteredRecords} />
+        </motion.div>
 
         {/* Woreda Compliance Progress Bars Table (36 Woredas) */}
-        <ComplianceTable complianceList={complianceList} />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.6, ease: 'easeOut' }}
+        >
+          <ComplianceTable complianceList={complianceList} />
+        </motion.div>
 
         {/* Field Officer Sign-Off & Verification Stamp Block (Print Mode Only) */}
         {isPrintFriendlyMode && (
@@ -347,20 +405,10 @@ export default function App() {
 
       </main>
 
-      {/* Footer */}
-      <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6 mt-12 transition-colors">
-        <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 dark:text-slate-400 space-y-1">
-          <p className="font-bold text-slate-800 dark:text-slate-200">
-            Hirna Regional Veterinary Diagnostic Laboratory (HRVL) Surveillance System
-          </p>
-          <p>
-            Oromia Regional State Agriculture Bureau • East Hararghe (21 Woredas) & West Hararghe (15 Woredas)
-          </p>
-          <p className="text-[11px] text-slate-400">
-            Contact: +251 933 310 270 | henz@hirnarvl.onmicrosoft.com | Oromia, Ethiopia
-          </p>
-        </div>
-      </footer>
+      {/* Footer Banner */}
+      <div className={isPrintFriendlyMode ? 'print:hidden' : ''}>
+        <FooterBanner />
+      </div>
 
       {/* Modals */}
       <NewArrivalModal

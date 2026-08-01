@@ -204,7 +204,7 @@ export const ExcelImportModal: React.FC<ExcelImportModalProps> = ({
                 {file ? file.name : 'Click to select or drag & drop .xlsx / .csv Excel file'}
               </p>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                Supports disease, outbreak, zero-report sheets for East & West Hararghe
+                Supports disease, outbreak, zero-report sheets for E/H & W/H
               </p>
             </div>
             <input

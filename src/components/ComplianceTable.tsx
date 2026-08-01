@@ -25,7 +25,7 @@ interface ComplianceTableProps {
 
 export const ComplianceTable: React.FC<ComplianceTableProps> = ({ complianceList }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [zoneFilter, setZoneFilter] = useState<'All' | 'East Hararghe' | 'West Hararghe'>('All');
+  const [zoneFilter, setZoneFilter] = useState<'All' | 'E/H' | 'W/H'>('All');
   const [complianceCategory, setComplianceCategory] = useState<'All' | 'Compliant' | 'Needs Attention' | 'Chronic Non-Reporting'>('All');
   const [sortField, setSortField] = useState<keyof WoredaCompliance>('complianceRate');
   const [sortAsc, setSortAsc] = useState(false);
@@ -100,7 +100,7 @@ export const ComplianceTable: React.FC<ComplianceTableProps> = ({ complianceList
             </span>
           </div>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            East Hararghe (21) & West Hararghe (15) surveillance submission rates, drill-down inspection, and chronic gap detection.
+            E/H (21) & W/H (15) surveillance submission rates, drill-down inspection, and chronic gap detection.
           </p>
         </div>
 
@@ -153,20 +153,20 @@ export const ComplianceTable: React.FC<ComplianceTableProps> = ({ complianceList
               All Zones
             </button>
             <button
-              onClick={() => setZoneFilter('East Hararghe')}
+              onClick={() => setZoneFilter('E/H')}
               className={`px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
-                zoneFilter === 'East Hararghe' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs' : 'text-slate-600 dark:text-slate-400'
+                zoneFilter === 'E/H' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs' : 'text-slate-600 dark:text-slate-400'
               }`}
             >
-              East (21)
+              E/H (21)
             </button>
             <button
-              onClick={() => setZoneFilter('West Hararghe')}
+              onClick={() => setZoneFilter('W/H')}
               className={`px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
-                zoneFilter === 'West Hararghe' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs' : 'text-slate-600 dark:text-slate-400'
+                zoneFilter === 'W/H' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs' : 'text-slate-600 dark:text-slate-400'
               }`}
             >
-              West (15)
+              W/H (15)
             </button>
           </div>
 
@@ -241,7 +241,7 @@ export const ComplianceTable: React.FC<ComplianceTableProps> = ({ complianceList
                   </td>
                   <td className="py-2.5 px-3">
                     <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
-                      item.zone === 'East Hararghe'
+                      item.zone === 'E/H'
                         ? 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300'
                         : 'bg-teal-100 text-teal-800 dark:bg-teal-950 dark:text-teal-300'
                     }`}>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Sparkles, FileText, Loader2, CheckCircle2, Printer, AlertCircle } from 'lucide-react';
 import { NarrativeReport, Outbreak, SurveillanceRecord, WoredaCompliance } from '../types';
+import { WoredaReportMap } from './WoredaReportMap';
 
 interface AIReportModalProps {
   isOpen: boolean;
@@ -66,10 +67,10 @@ export const AIReportModal: React.FC<AIReportModalProps> = ({
       setReportData({
         title: 'HRVL Regional Veterinary Surveillance & Situation Report',
         dateGenerated: new Date().toLocaleDateString('en-US', { dateStyle: 'full' }),
-        executiveSummary: `During the current reporting quarter, the Hirna Regional Veterinary Laboratory (HRVL) logged a total of ${records.length} field surveillance submissions representing ${totalCases} animal cases and ${totalDeaths} deaths across East and West Hararghe zones. Active disease transmission was detected in major livestock corridors including Haramaya, Dadar, Chiro, and Daro Lebu. Woreda zero-reporting compliance stands at ${complianceRate}%, meeting target thresholds in key highland districts while requiring urgent intervention in low pastoral border sectors.`,
+        executiveSummary: `During the current reporting quarter, the Hirna Regional Veterinary Laboratory (HRVL) logged a total of ${records.length} field surveillance submissions representing ${totalCases} animal cases and ${totalDeaths} deaths across E/H and W/H zones. Active disease transmission was detected in major livestock corridors including Haramaya, Dadar, Chiro, and Daro Lebu. Woreda zero-reporting compliance stands at ${complianceRate}%, meeting target thresholds in key highland districts while requiring urgent intervention in low pastoral border sectors.`,
         outbreakStatusAnalysis: `Key outbreak vectors include Foot-and-Mouth Disease (FMD) in cattle herds surrounding Harar market transit routes, Peste des Petits Ruminants (PPR) affecting small ruminants in Dadar and Mieso, and localized Anthrax cases requiring strict carcase burial protocols in Habro. Transboundary movement along the Djibouti highway axis remains a heightened risk factor.`,
         speciesVulnerability: `Bovine species account for the highest total morbidity volume (${totalCases > 500 ? '60%' : '45%'}), while small ruminants (Goats & Sheep) demonstrate elevated mortality rates associated with PPR outbreaks. Poultry flocks exhibit acute Newcastle Disease events in backyard farming systems.`,
-        zonalComplianceSummary: `East Hararghe Zone (21 Woredas) achieved an average reporting compliance rate of 88%, led by Haramaya and Babile. West Hararghe Zone (15 Woredas) maintained 83% compliance, with Chiro and Habro exhibiting consistent weekly reporting.`,
+        zonalComplianceSummary: `E/H Zone (21 Woredas) achieved an average reporting compliance rate of 88%, led by Haramaya and Babile. W/H Zone (15 Woredas) maintained 83% compliance, with Chiro and Habro exhibiting consistent weekly reporting.`,
         highRiskWoredas: ['Haramaya', 'Dadar', 'Chiro', 'Daro Lebu', 'Habro', 'Babile'],
         epidemiologicalRecommendations: [
           'Immediate ring vaccination for high risk bovine herds in Haramaya and Dadar border kebeles',
@@ -139,7 +140,7 @@ export const AIReportModal: React.FC<AIReportModalProps> = ({
                 Generating Epidemiological Narrative...
               </p>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Synthesizing East & West Hararghe disease dynamics with Gemini AI
+                Synthesizing E/H & W/H disease dynamics with Gemini AI
               </p>
             </div>
           )}
@@ -168,6 +169,9 @@ export const AIReportModal: React.FC<AIReportModalProps> = ({
                   {reportData.outbreakStatusAnalysis}
                 </p>
               </div>
+
+              {/* Woreda-Level Disease Surveillance Map */}
+              <WoredaReportMap records={records} outbreaks={outbreaks} />
 
               <div>
                 <h5 className="font-bold text-slate-900 dark:text-white text-xs mb-1">

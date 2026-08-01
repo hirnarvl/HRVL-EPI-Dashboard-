@@ -1,4 +1,4 @@
-export type ZoneName = 'East Hararghe' | 'West Hararghe';
+export type ZoneName = 'E/H' | 'W/H';
 
 export type LivestockSpecies = 
   | 'Cattle' 

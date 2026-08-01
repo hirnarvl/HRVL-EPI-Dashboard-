@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { 
   FileCheck, 
   AlertTriangle, 
@@ -45,12 +46,12 @@ export const KPICards: React.FC<KPICardsProps> = ({
     ? Math.round(complianceList.reduce((acc, curr) => acc + curr.complianceRate, 0) / complianceList.length)
     : 0;
 
-  const eastCompliance = complianceList.filter(c => c.zone === 'East Hararghe');
+  const eastCompliance = complianceList.filter(c => c.zone === 'E/H');
   const eastAvgRate = eastCompliance.length
     ? Math.round(eastCompliance.reduce((acc, curr) => acc + curr.complianceRate, 0) / eastCompliance.length)
     : 0;
 
-  const westCompliance = complianceList.filter(c => c.zone === 'West Hararghe');
+  const westCompliance = complianceList.filter(c => c.zone === 'W/H');
   const westAvgRate = westCompliance.length
     ? Math.round(westCompliance.reduce((acc, curr) => acc + curr.complianceRate, 0) / westCompliance.length)
     : 0;
@@ -124,7 +125,7 @@ export const KPICards: React.FC<KPICardsProps> = ({
       icon: MapPin,
       color: 'text-purple-600 dark:text-purple-400',
       bg: 'bg-purple-50 dark:bg-purple-950/40 border-purple-200 dark:border-purple-900',
-      subtext: 'East & West Hararghe zones'
+      subtext: 'E/H & W/H zones'
     },
     {
       title: 'Active Outbreaks (Critical)',
@@ -145,8 +146,11 @@ export const KPICards: React.FC<KPICardsProps> = ({
         {kpis.map((item, idx) => {
           const IconComponent = item.icon;
           return (
-            <div
+            <motion.div
               key={idx}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: idx * 0.05, ease: 'easeOut' }}
               className={`p-4 rounded-xl border transition-all duration-200 ${item.bg} hover:shadow-md`}
             >
               <div className="flex items-start justify-between">
@@ -182,7 +186,7 @@ export const KPICards: React.FC<KPICardsProps> = ({
                   <span>{item.change}</span>
                 </span>
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>
@@ -190,7 +194,12 @@ export const KPICards: React.FC<KPICardsProps> = ({
       {/* 3 Reporting Rate Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Card 1: Overall Hararghe */}
-        <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-900 to-teal-900 text-white shadow-md border border-emerald-800">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.4, ease: 'easeOut' }}
+          className="p-4 rounded-xl bg-gradient-to-r from-emerald-900 to-teal-900 text-white shadow-md border border-emerald-800"
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-widest text-emerald-300">
               HRVL Overall Coverage
@@ -212,13 +221,18 @@ export const KPICards: React.FC<KPICardsProps> = ({
           <p className="text-xs text-emerald-200/80 mt-2">
             Regional threshold target: 80% submission consistency
           </p>
-        </div>
+        </motion.div>
 
-        {/* Card 2: East Hararghe */}
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+        {/* Card 2: E/H */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.45, ease: 'easeOut' }}
+          className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm"
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">
-              East Hararghe Zone
+              E/H Zone
             </span>
             <span className="px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300 rounded-full">
               21 Woredas
@@ -237,13 +251,18 @@ export const KPICards: React.FC<KPICardsProps> = ({
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
             Active Hub: Haramaya, Babile, Dadar & Girawa
           </p>
-        </div>
+        </motion.div>
 
-        {/* Card 3: West Hararghe */}
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+        {/* Card 3: W/H */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.5, ease: 'easeOut' }}
+          className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm"
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-widest text-teal-600 dark:text-teal-400">
-              West Hararghe Zone
+              W/H Zone
             </span>
             <span className="px-2 py-0.5 text-xs font-semibold bg-teal-100 text-teal-800 dark:bg-teal-950 dark:text-teal-300 rounded-full">
               15 Woredas
@@ -262,7 +281,7 @@ export const KPICards: React.FC<KPICardsProps> = ({
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
             Active Hub: Chiro, Daro Lebu, Habro & Mieso
           </p>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

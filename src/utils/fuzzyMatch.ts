@@ -102,8 +102,8 @@ export function matchWoreda(inputName: string): WoredaInfo | null {
 export function detectZone(woredaName: string, fallbackZone?: string): ZoneName {
   const matched = matchWoreda(woredaName);
   if (matched) return matched.zone;
-  if (fallbackZone && (fallbackZone.toLowerCase().includes('west') || fallbackZone.toLowerCase().includes('w/hararghe'))) {
-    return 'West Hararghe';
+  if (fallbackZone && (fallbackZone.toLowerCase().includes('west') || fallbackZone.toLowerCase().includes('w/h') || fallbackZone.toLowerCase().includes('w/hararghe'))) {
+    return 'W/H';
   }
-  return 'East Hararghe';
+  return 'E/H';
 }
