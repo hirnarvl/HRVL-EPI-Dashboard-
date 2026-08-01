@@ -13,7 +13,12 @@ import {
   Building2,
   Printer,
   Volume2,
-  VolumeX
+  VolumeX,
+  TrendingUp,
+  Wifi,
+  WifiOff,
+  Database,
+  RotateCcw
 } from 'lucide-react';
 import { FilterState, ZoneName } from '../types';
 import { soundEngine } from '../utils/sound';
@@ -25,12 +30,16 @@ interface NavbarProps {
   setFilters: React.Dispatch<React.SetStateAction<FilterState>>;
   onOpenLogModal: () => void;
   onOpenImportModal: () => void;
+  onOpenYoYModal: () => void;
   onOpenReportModal: () => void;
   onExportAllCSV: () => void;
   onToggleSimulator: () => void;
   isSimulatorRunning: boolean;
   onTogglePrintMode: () => void;
   isPrintFriendlyMode: boolean;
+  isOnline?: boolean;
+  cachedRecordsCount?: number;
+  onResetCache?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -40,12 +49,16 @@ export const Navbar: React.FC<NavbarProps> = ({
   setFilters,
   onOpenLogModal,
   onOpenImportModal,
+  onOpenYoYModal,
   onOpenReportModal,
   onExportAllCSV,
   onToggleSimulator,
   isSimulatorRunning,
   onTogglePrintMode,
-  isPrintFriendlyMode
+  isPrintFriendlyMode,
+  isOnline = true,
+  cachedRecordsCount = 0,
+  onResetCache
 }) => {
   const [soundEnabled, setSoundEnabled] = useState<boolean>(soundEngine.enabled);
 
@@ -76,13 +89,35 @@ export const Navbar: React.FC<NavbarProps> = ({
               />
             </div>
             <div>
-              <div className="flex items-center space-x-2">
+              <div className="flex flex-wrap items-center gap-1.5">
                 <h1 className="text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">
                   Hirna RVL Analytics
                 </h1>
                 <span className="px-2 py-0.5 text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 rounded-full border border-emerald-300 dark:border-emerald-800">
                   Oromia HRVL
                 </span>
+                
+                {/* Offline LocalStorage Cache Indicator Badge */}
+                <div 
+                  className={`inline-flex items-center space-x-1 px-2 py-0.5 text-[11px] font-bold rounded-full border transition-all ${
+                    !isOnline 
+                      ? 'bg-amber-100 text-amber-900 border-amber-400 dark:bg-amber-950 dark:text-amber-200 dark:border-amber-700 animate-pulse'
+                      : 'bg-indigo-50 text-indigo-800 border-indigo-200 dark:bg-indigo-950/80 dark:text-indigo-300 dark:border-indigo-800'
+                  }`}
+                  title={isOnline ? `Surveillance data cached in browser localStorage (${cachedRecordsCount} records)` : `Offline Mode: Field entries saved locally to localStorage (${cachedRecordsCount} records)`}
+                >
+                  {!isOnline ? (
+                    <>
+                      <WifiOff className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                      <span>Offline Cache Active ({cachedRecordsCount} recs)</span>
+                    </>
+                  ) : (
+                    <>
+                      <Database className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
+                      <span>Cached Locally ({cachedRecordsCount} recs)</span>
+                    </>
+                  )}
+                </div>
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mt-0.5">
                 <Building2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
@@ -145,7 +180,18 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-750 rounded-lg border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
             >
               <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span>Excel Import</span>
+              <span>Multi-Excel Import</span>
+            </button>
+
+            <button
+              onClick={() => {
+                soundEngine.playClick();
+                onOpenYoYModal();
+              }}
+              className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-bold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-lg shadow-xs transition-all cursor-pointer"
+            >
+              <TrendingUp className="w-3.5 h-3.5" />
+              <span>YoY Analysis</span>
             </button>
 
             <button
@@ -169,6 +215,23 @@ export const Navbar: React.FC<NavbarProps> = ({
               <FileText className="w-3.5 h-3.5" />
               <span>AI SitRep Report</span>
             </button>
+
+            {/* Reset Cache / Defaults Button */}
+            {onResetCache && (
+              <button
+                onClick={() => {
+                  if (window.confirm('Reset offline cached records and revert to default sample dataset?')) {
+                    soundEngine.playClick();
+                    onResetCache();
+                  }
+                }}
+                title="Reset offline cache and restore default sample data"
+                className="inline-flex items-center space-x-1 px-2.5 py-1.5 text-xs font-medium text-slate-500 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span className="hidden lg:inline">Reset Cache</span>
+              </button>
+            )}
 
             {/* Field Print Snapshot Toggle Button */}
             <button

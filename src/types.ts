@@ -50,6 +50,8 @@ export interface SurveillanceRecord {
   phone?: string;
   reporter?: string;
   isZeroReport?: boolean;
+  sourceFile?: string;
+  sourceYear?: number;
 }
 
 export interface Outbreak {

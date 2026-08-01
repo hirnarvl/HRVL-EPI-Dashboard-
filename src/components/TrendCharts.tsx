@@ -19,6 +19,7 @@ interface TrendChartsProps {
   onAddLogArrival: (rec: Partial<SurveillanceRecord>) => void;
   isSimulatorRunning: boolean;
   onToggleSimulator: () => void;
+  onOpenYoYModal?: () => void;
 }
 
 export const TrendCharts: React.FC<TrendChartsProps> = ({
@@ -26,7 +27,8 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
   darkMode,
   onAddLogArrival,
   isSimulatorRunning,
-  onToggleSimulator
+  onToggleSimulator,
+  onOpenYoYModal
 }) => {
   const [timeframe, setTimeframe] = useState<'Daily' | 'Weekly' | 'Monthly'>('Weekly');
   const [showYoYOverlay, setShowYoYOverlay] = useState<boolean>(true);
@@ -143,6 +145,17 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
             <Clock className="w-3.5 h-3.5" />
             <span>{showYoYOverlay ? '📊 YoY Multi-Year Overlay ON' : 'Show YoY Multi-Year Overlay'}</span>
           </button>
+
+          {/* Launch YoY Analysis Modal Button */}
+          {onOpenYoYModal && (
+            <button
+              onClick={onOpenYoYModal}
+              className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-black text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-lg shadow-xs transition-all cursor-pointer"
+            >
+              <Clock className="w-3.5 h-3.5" />
+              <span>📈 Launch YoY Trend Analysis</span>
+            </button>
+          )}
 
           {/* Timeframe Toggle */}
           <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg text-xs font-semibold">

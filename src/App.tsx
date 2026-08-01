@@ -19,6 +19,7 @@ import { ComplianceTable } from './components/ComplianceTable';
 import { FooterBanner } from './components/FooterBanner';
 import { NewArrivalModal } from './components/NewArrivalModal';
 import { ExcelImportModal } from './components/ExcelImportModal';
+import { YoYTrendAnalysisModal } from './components/YoYTrendAnalysisModal';
 import { AIReportModal } from './components/AIReportModal';
 import { PrintableReportView } from './components/PrintableReportView';
 
@@ -39,15 +40,44 @@ import {
 } from './data/sampleData';
 import { HARARGHE_WOREDAS } from './data/woredas';
 import { exportToCSV } from './utils/export';
+import { loadCachedRecords, saveCachedRecords, clearCachedRecords } from './utils/storage';
 
 export default function App() {
   const [darkMode, setDarkMode] = useState<boolean>(true);
   
-  // Primary Dashboard State
-  const [records, setRecords] = useState<SurveillanceRecord[]>(INITIAL_SURVEILLANCE_RECORDS);
+  // Primary Dashboard State - Initialized from localStorage cache for field offline resilience
+  const [records, setRecords] = useState<SurveillanceRecord[]>(loadCachedRecords);
   const [outbreaks, setOutbreaks] = useState<Outbreak[]>(INITIAL_OUTBREAKS);
   const [complianceList, setComplianceList] = useState<WoredaCompliance[]>(generateInitialCompliance());
   const [diseaseSummaries, setDiseaseSummaries] = useState<DiseaseSummary[]>(DISEASE_SUMMARIES);
+
+  // Network Connectivity State (Field Offline Mode Tracking)
+  const [isOnline, setIsOnline] = useState<boolean>(typeof navigator !== 'undefined' ? navigator.onLine : true);
+
+  // Synchronize network status
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  // Automatic localStorage Sync Effect whenever surveillance records change
+  useEffect(() => {
+    saveCachedRecords(records);
+  }, [records]);
+
+  // Reset local storage cache to initial default data
+  const handleResetCache = () => {
+    clearCachedRecords();
+    setRecords(INITIAL_SURVEILLANCE_RECORDS);
+  };
 
   // Filters State
   const [filters, setFilters] = useState<FilterState>({
@@ -67,6 +97,7 @@ export default function App() {
   // Modals
   const [isLogModalOpen, setIsLogModalOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [isYoYModalOpen, setIsYoYModalOpen] = useState(false);
   const [isAIReportModalOpen, setIsAIReportModalOpen] = useState(false);
   const [printableReport, setPrintableReport] = useState<NarrativeReport | null>(null);
 
@@ -244,12 +275,16 @@ export default function App() {
           setFilters={setFilters}
           onOpenLogModal={() => setIsLogModalOpen(true)}
           onOpenImportModal={() => setIsImportModalOpen(true)}
+          onOpenYoYModal={() => setIsYoYModalOpen(true)}
           onOpenReportModal={() => setIsAIReportModalOpen(true)}
           onExportAllCSV={handleExportAllCSV}
           onToggleSimulator={() => setIsSimulatorRunning(prev => !prev)}
           isSimulatorRunning={isSimulatorRunning}
           onTogglePrintMode={() => setIsPrintFriendlyMode(prev => !prev)}
           isPrintFriendlyMode={isPrintFriendlyMode}
+          isOnline={isOnline}
+          cachedRecordsCount={records.length}
+          onResetCache={handleResetCache}
         />
       </div>
 
@@ -328,6 +363,7 @@ export default function App() {
             onAddLogArrival={handleAddLogArrival}
             isSimulatorRunning={isSimulatorRunning}
             onToggleSimulator={() => setIsSimulatorRunning(prev => !prev)}
+            onOpenYoYModal={() => setIsYoYModalOpen(true)}
           />
         </motion.div>
 
@@ -421,6 +457,14 @@ export default function App() {
         isOpen={isImportModalOpen}
         onClose={() => setIsImportModalOpen(false)}
         onImportRecords={handleImportRecords}
+        onOpenYoYAnalysis={() => setIsYoYModalOpen(true)}
+      />
+
+      <YoYTrendAnalysisModal
+        isOpen={isYoYModalOpen}
+        onClose={() => setIsYoYModalOpen(false)}
+        records={records}
+        darkMode={darkMode}
       />
 
       <AIReportModal
