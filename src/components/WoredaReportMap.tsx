@@ -79,9 +79,11 @@ export const WoredaReportMap: React.FC<WoredaReportMapProps> = ({
           const wName = feature?.properties?.name || feature?.properties?.WOREDABAME || '';
           const stats = woredaStats.find(w => w.name.toLowerCase() === wName.toLowerCase());
           const cases = stats?.totalCases || 0;
-          const zone = stats?.zone || (feature?.properties?.zone === 'East Hararghe' ? 'E/H' : 'W/H');
+          const isEast = stats ? stats.zone === 'E/H' : (feature?.properties?.zone === 'E/H' || feature?.properties?.zone === 'East Hararghe');
+          const zone = isEast ? 'E/H' : 'W/H';
 
-          let fillColor = zone === 'E/H' ? '#0284c7' : '#9333ea';
+          let strokeColor = isEast ? '#0284c7' : '#c026d3';
+          let fillColor = isEast ? '#0284c7' : '#c026d3';
           let fillOpacity = 0.12;
 
           if (cases >= 50) {
@@ -99,11 +101,10 @@ export const WoredaReportMap: React.FC<WoredaReportMapProps> = ({
           }
 
           return {
-            color: zone === 'E/H' ? '#0284c7' : '#9333ea',
-            weight: 1.5,
+            color: strokeColor,
+            weight: 3.0,
             fillColor,
             fillOpacity,
-            dashArray: '2,2',
           };
         },
         onEachFeature: (feature, layer) => {

@@ -1,0 +1,30 @@
+{
+  "entities": {
+    "surveillanceRecords": {
+      "title": "Surveillance Record",
+      "description": "Surveillance log for animal diseases in HRVL woredas",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string" },
+        "timestamp": { "type": "number" },
+        "woreda": { "type": "string" },
+        "zone": { "type": "string" },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "disease": { "type": "string" },
+        "species": { "type": "string" },
+        "cases": { "type": "number" },
+        "deaths": { "type": "number" },
+        "risk": { "type": "string" },
+        "comment": { "type": "string" },
+        "phone": { "type": "string" },
+        "reporter": { "type": "string" },
+        "isZeroReport": { "type": "boolean" },
+        "sourceFile": { "type": "string" },
+        "sourceYear": { "type": "number" }
+      },
+      "required": ["date", "woreda", "zone", "disease", "species", "cases", "deaths"]
+    }
+  }
+}

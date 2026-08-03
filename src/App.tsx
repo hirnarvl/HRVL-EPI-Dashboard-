@@ -41,6 +41,7 @@ import {
 import { HARARGHE_WOREDAS } from './data/woredas';
 import { exportToCSV } from './utils/export';
 import { loadCachedRecords, saveCachedRecords, clearCachedRecords } from './utils/storage';
+import { subscribeToFirestoreRecords, saveRecordToFirestore } from './utils/firebaseStorage';
 
 export default function App() {
   const [darkMode, setDarkMode] = useState<boolean>(true);
@@ -72,6 +73,16 @@ export default function App() {
   useEffect(() => {
     saveCachedRecords(records);
   }, [records]);
+
+  // Real-time Firestore sync effect
+  useEffect(() => {
+    const unsub = subscribeToFirestoreRecords((remoteRecords) => {
+      if (remoteRecords && remoteRecords.length > 0) {
+        setRecords(remoteRecords);
+      }
+    });
+    return () => unsub();
+  }, []);
 
   // Reset local storage cache to initial default data
   const handleResetCache = () => {
@@ -182,6 +193,7 @@ export default function App() {
     };
 
     setRecords(prev => [fullRec, ...prev]);
+    saveRecordToFirestore(fullRec);
 
     // Recalculate disease summary counts
     setDiseaseSummaries(prev => prev.map(ds => {
@@ -200,6 +212,7 @@ export default function App() {
   // Handle Excel Batch Import
   const handleImportRecords = (newRecords: SurveillanceRecord[], minDate?: string, maxDate?: string) => {
     setRecords(prev => [...newRecords, ...prev]);
+    newRecords.forEach(rec => saveRecordToFirestore(rec));
     if (minDate && maxDate) {
       setFilters(prev => ({ ...prev, dateFrom: minDate, dateTo: maxDate }));
     }

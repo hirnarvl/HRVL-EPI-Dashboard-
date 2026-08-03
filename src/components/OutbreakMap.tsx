@@ -59,6 +59,19 @@ export const KNOWN_DISEASES = [
   { id: 'newcastle', name: 'Newcastle Disease', keyword: 'newcastle', color: '#ec4899', icon: '🐔' },
 ];
 
+// Helper function to reliably identify East vs West Hararghe Woredas from GeoJSON properties or metadata
+const checkZoneIsEast = (props: any): boolean => {
+  if (!props) return true;
+  const rawZone = props.zone || '';
+  if (rawZone === 'E/H' || rawZone === 'East Hararghe') return true;
+  if (rawZone === 'W/H' || rawZone === 'West Hararghe') return false;
+  if (props.id && typeof props.id === 'string' && props.id.toLowerCase().startsWith('eh')) return true;
+  if (props.id && typeof props.id === 'string' && props.id.toLowerCase().startsWith('wh')) return false;
+  const woredaName = props.name || props.WOREDABAME || '';
+  const matched = HARARGHE_WOREDAS.find(w => w.name.toLowerCase() === woredaName.toLowerCase());
+  return matched ? matched.zone === 'E/H' : true;
+};
+
 export const OutbreakMap: React.FC<OutbreakMapProps> = ({
   outbreaks,
   records,
@@ -336,27 +349,29 @@ export const OutbreakMap: React.FC<OutbreakMapProps> = ({
     if (showEastHarargheWoredas || showWestHarargheWoredas) {
       const harargheLayer = L.geoJSON(HARARGHE_WOREDAS_GEOJSON as any, {
         filter: (feature) => {
-          const zone = feature.properties.zone;
-          if (selectedZone !== 'All' && zone !== selectedZone) return false;
-          if (zone === 'E/H' && !showEastHarargheWoredas) return false;
-          if (zone === 'W/H' && !showWestHarargheWoredas) return false;
+          const isEast = checkZoneIsEast(feature?.properties);
+          const zoneCode = isEast ? 'E/H' : 'W/H';
+          if (selectedZone !== 'All' && zoneCode !== selectedZone) return false;
+          if (isEast && !showEastHarargheWoredas) return false;
+          if (!isEast && !showWestHarargheWoredas) return false;
           return true;
         },
         style: (feature) => {
-          const props = feature?.properties;
-          const isEast = props.zone === 'E/H';
-          const cases = woredaCaseMap[props.name.toLowerCase()] || 0;
-          const deaths = woredaMortalityMap[props.name.toLowerCase()] || 0;
+          const props = feature?.properties || {};
+          const isEast = checkZoneIsEast(props);
+          const woredaName = (props.name || props.WOREDABAME || '').toLowerCase();
+          const cases = woredaCaseMap[woredaName] || 0;
+          const deaths = woredaMortalityMap[woredaName] || 0;
 
           // Distinct zonal border outline stroke colors for East vs West Hararghe Woredas:
-          // East Hararghe (E/H, 21 Woredas): Royal Cyan / Sky Blue (#0284c7 in light mode, #38bdf8 in dark mode)
-          // West Hararghe (W/H, 15 Woredas): Vibrant Purple / Magenta (#9333ea in light mode, #e879f9 in dark mode)
+          // East Hararghe (E/H, 21 Woredas): Royal Sky Cyan / Electric Cyan (#0284c7 in light mode, #38bdf8 in dark mode)
+          // West Hararghe (W/H, 15 Woredas): Deep Vivid Magenta / Electric Fuchsia (#c026d3 in light mode, #f0abfc in dark mode)
           const zonalStrokeColor = isEast
             ? (darkMode ? '#38bdf8' : '#0284c7')
-            : (darkMode ? '#e879f9' : '#9333ea');
+            : (darkMode ? '#f0abfc' : '#c026d3');
           
           let strokeColor = zonalStrokeColor;
-          let strokeWidth = 2.4;
+          let strokeWidth = 3.2; // Prominent stroke weight to clearly outline Woreda borders
           let fillColor = 'transparent';
           let fillOpacity = 0.02;
 
@@ -392,24 +407,24 @@ export const OutbreakMap: React.FC<OutbreakMapProps> = ({
               fillOpacity = 0.10;
             }
           } else if (polygonMode === 'zone_color') {
-            fillColor = isEast ? '#3b82f6' : '#8b5cf6';
-            fillOpacity = 0.22;
+            fillColor = isEast ? '#0284c7' : '#c026d3';
+            fillOpacity = 0.25;
           } else if (polygonMode === 'zone_fracture' || polygonMode === 'transparent') {
             fillColor = 'transparent';
             fillOpacity = 0.01;
-            strokeWidth = 2.5;
+            strokeWidth = 3.2;
           } else if (polygonMode === 'cluster_hotspots') {
-            fillColor = isEast ? 'rgba(59, 130, 246, 0.05)' : 'rgba(168, 85, 247, 0.05)';
-            fillOpacity = 0.06;
+            fillColor = isEast ? 'rgba(2, 132, 199, 0.08)' : 'rgba(192, 38, 211, 0.08)';
+            fillOpacity = 0.08;
           }
 
           // Highlight if selected
-          const isSelected = selectedWoreda?.name === props.name;
+          const isSelected = selectedWoreda?.name.toLowerCase() === woredaName;
           if (isSelected) {
-            fillColor = isEast ? '#3b82f6' : '#8b5cf6';
-            fillOpacity = 0.45;
-            strokeColor = '#ffffff';
-            strokeWidth = 3.5;
+            fillColor = isEast ? '#0284c7' : '#c026d3';
+            fillOpacity = 0.5;
+            strokeColor = isEast ? '#00f2fe' : '#f472b6';
+            strokeWidth = 4.5;
           }
 
           return {
@@ -421,21 +436,22 @@ export const OutbreakMap: React.FC<OutbreakMapProps> = ({
           };
         },
         onEachFeature: (feature, layer) => {
-          const props = feature.properties;
-          const cases = woredaCaseMap[props.name.toLowerCase()] || 0;
-          const deaths = woredaMortalityMap[props.name.toLowerCase()] || 0;
-          const isEast = props.zone === 'E/H';
+          const props = feature.properties || {};
+          const woredaName = props.name || props.WOREDABAME || 'Woreda';
+          const cases = woredaCaseMap[woredaName.toLowerCase()] || 0;
+          const deaths = woredaMortalityMap[woredaName.toLowerCase()] || 0;
+          const isEast = checkZoneIsEast(props);
 
           const riskBadge = deaths >= 10 ? '🚨 CRITICAL MORTALITY HOTSPOT' : deaths >= 3 ? '⚠️ HIGH MORTALITY RISK' : cases > 0 ? '⚡ MODERATE SPREAD RISK' : '✅ LOW / ZERO RISK';
           const riskColor = deaths >= 10 ? '#ef4444' : deaths >= 3 ? '#f97316' : cases > 0 ? '#facc15' : '#10b981';
 
           layer.bindTooltip(`
             <div style="font-family: sans-serif; padding: 5px 8px; min-width: 160px;">
-              <div style="font-weight: 800; font-size: 13px; color: ${isEast ? '#3b82f6' : '#a855f7'};">
-                📍 ${props.name} Woreda
+              <div style="font-weight: 800; font-size: 13px; color: ${isEast ? '#0284c7' : '#c026d3'};">
+                📍 ${woredaName} Woreda
               </div>
               <div style="font-size: 11px; color: #94a3b8; margin-bottom: 3px;">
-                Zone: ${props.zone}
+                Zone: <b>${isEast ? 'East Hararghe (E/H)' : 'West Hararghe (W/H)'}</b>
               </div>
               <div style="font-size: 11px; font-weight: 800; color: ${riskColor}; margin-bottom: 2px;">
                 ${riskBadge}
@@ -452,16 +468,17 @@ export const OutbreakMap: React.FC<OutbreakMapProps> = ({
             mouseover: (e) => {
               const l = e.target;
               l.setStyle({
-                fillColor: isEast ? '#60a5fa' : '#c084fc',
-                fillOpacity: 0.35,
-                weight: 3
+                fillColor: isEast ? '#38bdf8' : '#f0abfc',
+                fillOpacity: 0.38,
+                weight: 4.0,
+                color: isEast ? '#00f2fe' : '#f472b6'
               });
             },
             mouseout: (e) => {
               harargheLayer.resetStyle(e.target);
             },
             click: () => {
-              const matchedW = HARARGHE_WOREDAS.find(w => w.name === props.name);
+              const matchedW = HARARGHE_WOREDAS.find(w => w.name.toLowerCase() === woredaName.toLowerCase());
               if (matchedW) {
                 setSelectedWoreda(matchedW);
                 setSelectedOutbreak(null);
