@@ -8,6 +8,7 @@ import { motion } from 'motion/react';
 import { Printer, X, ShieldCheck, FileText, Check, Activity, Building2 } from 'lucide-react';
 import { Navbar } from './components/Navbar';
 import { KPICards } from './components/KPICards';
+import { MELScorecardPanel } from './components/MELScorecardPanel';
 import { OutbreakMap } from './components/OutbreakMap';
 import { TrendCharts } from './components/TrendCharts';
 import { SpeciesDonutChart } from './components/SpeciesDonutChart';
@@ -101,9 +102,10 @@ export default function App() {
     searchTerm: ''
   });
 
-  // Simulator & Print Mode State
+  // Simulator, Portrait Layout & Print Mode State
   const [isSimulatorRunning, setIsSimulatorRunning] = useState(false);
   const [isPrintFriendlyMode, setIsPrintFriendlyMode] = useState(false);
+  const [isPortraitMode, setIsPortraitMode] = useState(false);
 
   // Modals
   const [isLogModalOpen, setIsLogModalOpen] = useState(false);
@@ -295,14 +297,39 @@ export default function App() {
           isSimulatorRunning={isSimulatorRunning}
           onTogglePrintMode={() => setIsPrintFriendlyMode(prev => !prev)}
           isPrintFriendlyMode={isPrintFriendlyMode}
+          isPortraitMode={isPortraitMode}
+          onTogglePortraitMode={() => setIsPortraitMode(prev => !prev)}
           isOnline={isOnline}
           cachedRecordsCount={records.length}
           onResetCache={handleResetCache}
         />
       </div>
 
-      {/* Main Container */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+      {/* Main Container with Portrait Mode & Desktop Fluid Grid Layout */}
+      <main className={`mx-auto transition-all duration-300 py-6 space-y-6 ${
+        isPortraitMode 
+          ? 'max-w-2xl px-3 sm:px-4 bg-slate-900/40 dark:bg-slate-900/60 rounded-3xl my-4 border border-indigo-500/20 shadow-2xl ring-1 ring-indigo-500/10' 
+          : 'max-w-7xl px-4 sm:px-6 lg:px-8'
+      }`}>
+
+        {/* Portrait Mode Field Banner */}
+        {isPortraitMode && (
+          <div className="bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-950 text-indigo-200 border border-indigo-700/60 p-4 rounded-2xl shadow-lg flex items-center justify-between gap-3 text-xs">
+            <div className="flex items-center space-x-2 font-medium">
+              <span className="text-lg">📱</span>
+              <div>
+                <p className="font-extrabold text-white font-heading">Portrait Field Mode Active</p>
+                <p className="text-[11px] text-indigo-300">Optimized vertical stack for handheld tablets & field mobile screens.</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setIsPortraitMode(false)}
+              className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg text-[11px] transition-colors cursor-pointer shrink-0"
+            >
+              Exit Portrait
+            </button>
+          </div>
+        )}
         
         {/* Printable Official Header Block (Appears prominently in print mode) */}
         {isPrintFriendlyMode && (
@@ -350,6 +377,20 @@ export default function App() {
           />
         </motion.div>
 
+        {/* WAHO / WOAH MEL Scorecard & Data Quality Panel */}
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.42, delay: 0.1, ease: 'easeOut' }}
+        >
+          <MELScorecardPanel
+            records={filteredRecords}
+            outbreaks={outbreaks}
+            complianceList={complianceList}
+            onSelectZone={(zone) => setFilters(prev => ({ ...prev, zone }))}
+          />
+        </motion.div>
+
         {/* Interactive Outbreak Map */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -381,7 +422,7 @@ export default function App() {
         </motion.div>
 
         {/* 2-Column Section: Species Donut Chart + CFR Trend Line Chart */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className={`grid gap-6 ${isPortraitMode ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -400,7 +441,7 @@ export default function App() {
         </div>
 
         {/* Disease Summary & Outbreak Tables */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className={`grid gap-6 ${isPortraitMode ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

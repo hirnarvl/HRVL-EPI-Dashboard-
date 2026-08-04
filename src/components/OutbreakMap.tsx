@@ -974,15 +974,12 @@ export const OutbreakMap: React.FC<OutbreakMapProps> = ({
           <div>
             <div className="flex items-center space-x-2">
               <Globe className="w-5 h-5 text-emerald-600 dark:text-emerald-400 animate-pulse" />
-              <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <span>Geospatial Disease Surveillance & Realistic GIS Boundary Map</span>
-                <span className="px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">
-                  REAL-TIME HARARGHE GIS
-                </span>
-              </h2>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                Geospatial Disease Surveillance & GIS Map
+              </h3>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Photorealistic satellite imagery, elevation terrain contouring, and organic polygon boundaries across East (21) & West (15) Hararghe Woredas.
+              Photorealistic satellite imagery, elevation terrain contouring, and organic polygon boundaries across East & West Hararghe Woredas.
             </p>
           </div>
 

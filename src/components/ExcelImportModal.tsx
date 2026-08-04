@@ -289,9 +289,6 @@ export const ExcelImportModal: React.FC<ExcelImportModalProps> = ({
               <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">
                 Multi-Excel Batch Importer & YoY Consolidation
               </h3>
-              <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300 rounded-full border border-purple-300 dark:border-purple-800">
-                Batch Mode
-              </span>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Upload multiple Excel/CSV files simultaneously (e.g. 2023, 2024, 2025 reports) to consolidate & auto-trigger Year-over-Year (YoY) analysis

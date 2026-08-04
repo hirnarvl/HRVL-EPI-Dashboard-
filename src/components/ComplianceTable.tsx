@@ -95,9 +95,6 @@ export const ComplianceTable: React.FC<ComplianceTableProps> = ({ complianceList
             <h3 className="text-base font-bold text-slate-900 dark:text-white">
               Woreda Reporting Compliance & Non-Reporting Audit (36 Woredas)
             </h3>
-            <span className="px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-800">
-              ZERO-REPORTING AUDIT ACTIVE
-            </span>
           </div>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             E/H (21) & W/H (15) surveillance submission rates, drill-down inspection, and chronic gap detection.

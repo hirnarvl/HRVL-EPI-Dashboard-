@@ -129,6 +129,35 @@ export const YoYTrendAnalysisModal: React.FC<YoYTrendAnalysisModalProps> = ({
     return monthMap;
   }, [filteredRecords, selectedYears]);
 
+  // Helper to format shortened disease acronyms for bar chart X-axis
+  const getShortDiseaseName = (fullName: string): string => {
+    if (!fullName) return '';
+    const lower = fullName.toLowerCase();
+
+    if (lower.includes('newcastle')) return 'NC';
+    if (lower.includes('peste des petits') || lower.includes('ppr')) return 'PPR';
+    if (lower.includes('caprine pleuropneumonia') || lower.includes('ccpp')) return 'CCPP';
+    if (lower.includes('bovine pleuropneumonia') || lower.includes('cbpp')) return 'CBPP';
+    if (lower.includes('foot') || lower.includes('fmd')) return 'FMD';
+    if (lower.includes('lumpy') || lower.includes('lsd')) return 'LSD';
+    if (lower.includes('blackleg') || lower.includes('blackquarter') || lower.includes('bq')) return 'BQ';
+    if (lower.includes('sheep') || lower.includes('goat pox') || lower.includes('sgp')) return 'SGP';
+    if (lower.includes('anthrax')) return 'Anthrax';
+    if (lower.includes('rabies')) return 'Rabies';
+
+    const match = fullName.match(/\(([^)]+)\)/);
+    if (match && match[1]) return match[1].trim();
+
+    const clean = fullName.replace(/\s*\(.*?\)\s*/g, '').trim();
+    if (clean.length > 10) {
+      const words = clean.split(/\s+/);
+      if (words.length > 1) {
+        return words.map(w => w[0].toUpperCase()).join('');
+      }
+    }
+    return clean;
+  };
+
   // Calculate Disease-by-Disease YoY Breakdown
   const diseaseYoYData = useMemo(() => {
     const diseaseMap = new Map<string, Record<string, any>>();
@@ -140,7 +169,13 @@ export const YoYTrendAnalysisModal: React.FC<YoYTrendAnalysisModalProps> = ({
 
       const dis = r.disease;
       if (!diseaseMap.has(dis)) {
-        const item: Record<string, any> = { disease: dis.replace(/\s*\(.*?\)\s*/g, '') };
+        const fullClean = dis.replace(/\s*\(.*?\)\s*/g, '').trim();
+        const short = getShortDiseaseName(dis);
+        const item: Record<string, any> = { 
+          shortDisease: short,
+          fullDisease: fullClean.length > 0 ? `${fullClean} (${short})` : dis,
+          disease: short 
+        };
         selectedYears.forEach(y => { item[`year_${y}`] = 0; });
         diseaseMap.set(dis, item);
       }
@@ -265,9 +300,6 @@ export const YoYTrendAnalysisModal: React.FC<YoYTrendAnalysisModalProps> = ({
                 <h2 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                   Year-over-Year (YoY) & Multi-Year Trend Analysis
                 </h2>
-                <span className="px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300 rounded-full border border-purple-300 dark:border-purple-800">
-                  36 Woredas
-                </span>
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Consolidated temporal disease burden, seasonal transmission spikes, and multi-year trajectory across East & West Hararghe
@@ -478,28 +510,42 @@ export const YoYTrendAnalysisModal: React.FC<YoYTrendAnalysisModalProps> = ({
             
             {/* Chart 2: Disease-by-Disease Multi-Year Bar Chart */}
             <div className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700/80 shadow-2xs space-y-3">
-              <div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  <ShieldAlert className="w-4 h-4 text-rose-500" />
-                  <span>Disease-Specific Multi-Year Burden Shift</span>
-                </h3>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                  Side-by-side annual case counts per disease
-                </p>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <ShieldAlert className="w-4 h-4 text-rose-500" />
+                    <span>Disease-Specific Multi-Year Burden Shift</span>
+                  </h3>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Side-by-side annual case counts per disease category
+                  </p>
+                </div>
               </div>
 
               <div className="h-60 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={diseaseYoYData} margin={{ top: 10, right: 10, left: 0, bottom: 20 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? '#334155' : '#e2e8f0'} />
-                    <XAxis dataKey="disease" stroke={darkMode ? '#94a3b8' : '#64748b'} tick={{ fontSize: 9 }} interval={0} />
+                    <XAxis 
+                      dataKey="shortDisease" 
+                      stroke={darkMode ? '#94a3b8' : '#64748b'} 
+                      tick={{ fontSize: 11, fontWeight: 700 }} 
+                      interval={0} 
+                    />
                     <YAxis stroke={darkMode ? '#94a3b8' : '#64748b'} tick={{ fontSize: 11 }} />
                     <Tooltip
+                      labelFormatter={(_, payload) => {
+                        if (payload && payload.length > 0 && payload[0]?.payload) {
+                          return payload[0].payload.fullDisease || payload[0].payload.shortDisease;
+                        }
+                        return '';
+                      }}
                       contentStyle={{
                         backgroundColor: darkMode ? '#0f172a' : '#ffffff',
                         borderColor: darkMode ? '#334155' : '#cbd5e1',
                         borderRadius: '0.5rem',
-                        fontSize: '11px'
+                        fontSize: '11px',
+                        fontWeight: '600'
                       }}
                     />
                     {selectedYears.map(yr => (

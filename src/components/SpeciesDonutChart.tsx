@@ -1,11 +1,23 @@
 import React from 'react';
-import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
 import { Layers } from 'lucide-react';
+import { GiCow, GiGoat, GiSheep, GiChicken, GiHorseHead, GiCamel, GiPig } from 'react-icons/gi';
 import { SPECIES_DISTRIBUTION } from '../data/sampleData';
 
 interface SpeciesDonutChartProps {
   darkMode: boolean;
 }
+
+// Custom Infographic Animal Vector Icons for 7 Livestock Species
+const SpeciesIcons: Record<string, React.FC<{ className?: string }>> = {
+  Cattle: ({ className }) => React.createElement(GiCow, { className }),
+  Goats: ({ className }) => React.createElement(GiGoat, { className }),
+  Sheep: ({ className }) => React.createElement(GiSheep, { className }),
+  Poultry: ({ className }) => React.createElement(GiChicken, { className }),
+  Equines: ({ className }) => React.createElement(GiHorseHead, { className }),
+  Camels: ({ className }) => React.createElement(GiCamel, { className }),
+  'Swine / Others': ({ className }) => React.createElement(GiPig, { className })
+};
 
 export const SpeciesDonutChart: React.FC<SpeciesDonutChartProps> = ({ darkMode }) => {
   const totalCases = SPECIES_DISTRIBUTION.reduce((acc, curr) => acc + curr.cases, 0);
@@ -25,7 +37,7 @@ export const SpeciesDonutChart: React.FC<SpeciesDonutChartProps> = ({ darkMode }
         </span>
       </div>
 
-      <div className="h-64 w-full mt-2 relative flex items-center justify-center">
+      <div className="h-60 w-full mt-2 relative flex items-center justify-center">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -47,7 +59,8 @@ export const SpeciesDonutChart: React.FC<SpeciesDonutChartProps> = ({ darkMode }
                 borderColor: darkMode ? '#334155' : '#cbd5e1',
                 borderRadius: '0.5rem',
                 color: darkMode ? '#ffffff' : '#0f172a',
-                fontSize: '12px'
+                fontSize: '12px',
+                fontWeight: '600'
               }}
               formatter={(value: any, name: any) => [`${value} cases (${((value / totalCases) * 100).toFixed(1)}%)`, name]}
             />
@@ -56,24 +69,46 @@ export const SpeciesDonutChart: React.FC<SpeciesDonutChartProps> = ({ darkMode }
 
         {/* Center Donut Label */}
         <div className="absolute flex flex-col items-center justify-center text-center pointer-events-none">
-          <span className="text-xl font-black text-slate-900 dark:text-white">{totalCases}</span>
+          <span className="text-xl font-black text-slate-900 dark:text-white">{totalCases.toLocaleString()}</span>
           <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold">Total Cases</span>
         </div>
       </div>
 
-      {/* Legend Custom List */}
-      <div className="grid grid-cols-2 gap-x-2 gap-y-1 mt-2 text-xs pt-2 border-t border-slate-100 dark:border-slate-800">
-        {SPECIES_DISTRIBUTION.map(s => (
-          <div key={s.name} className="flex items-center justify-between">
-            <div className="flex items-center space-x-1.5 truncate">
+      {/* Compact Infographic Legend List with direct key-value alignment (No wide empty gaps) */}
+      <div className="grid grid-cols-2 gap-2 mt-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+        {SPECIES_DISTRIBUTION.map(s => {
+          const IconComp = SpeciesIcons[s.name] || SpeciesIcons['Cattle'];
+          const pct = ((s.cases / totalCases) * 100).toFixed(1);
+          return (
+            <div 
+              key={s.name} 
+              className="flex items-center space-x-2 px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/50 hover:border-slate-300 dark:hover:border-slate-600 transition-colors"
+            >
               <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: s.color }} />
-              <span className="text-slate-700 dark:text-slate-300 font-medium truncate">{s.name}</span>
+              <div 
+                className="p-1 rounded-md flex items-center justify-center shrink-0" 
+                style={{ backgroundColor: `${s.color}18`, color: s.color }}
+                title={s.name}
+              >
+                <IconComp className="w-3.5 h-3.5" />
+              </div>
+              <div className="flex items-center space-x-1 min-w-0">
+                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 truncate">
+                  {s.name}:
+                </span>
+                <span className="text-xs font-black text-slate-900 dark:text-white shrink-0">
+                  {s.cases.toLocaleString()}
+                </span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium shrink-0">
+                  ({pct}%)
+                </span>
+              </div>
             </div>
-            <span className="font-bold text-slate-900 dark:text-white ml-1">{s.cases}</span>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
     </div>
   );
 };
+

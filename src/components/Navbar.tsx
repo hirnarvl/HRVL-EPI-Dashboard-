@@ -18,7 +18,9 @@ import {
   Wifi,
   WifiOff,
   Database,
-  RotateCcw
+  RotateCcw,
+  Smartphone,
+  Maximize2
 } from 'lucide-react';
 import { FilterState, ZoneName } from '../types';
 import { soundEngine } from '../utils/sound';
@@ -37,6 +39,8 @@ interface NavbarProps {
   isSimulatorRunning: boolean;
   onTogglePrintMode: () => void;
   isPrintFriendlyMode: boolean;
+  isPortraitMode?: boolean;
+  onTogglePortraitMode?: () => void;
   isOnline?: boolean;
   cachedRecordsCount?: number;
   onResetCache?: () => void;
@@ -56,6 +60,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   isSimulatorRunning,
   onTogglePrintMode,
   isPrintFriendlyMode,
+  isPortraitMode = false,
+  onTogglePortraitMode,
   isOnline = true,
   cachedRecordsCount = 0,
   onResetCache
@@ -230,6 +236,34 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span className="hidden lg:inline">Reset Cache</span>
+              </button>
+            )}
+
+            {/* Portrait Mobile/Tablet Layout Toggle Button */}
+            {onTogglePortraitMode && (
+              <button
+                onClick={() => {
+                  soundEngine.playClick();
+                  onTogglePortraitMode();
+                }}
+                title={isPortraitMode ? 'Switch to Full Landscape Desktop View' : 'Switch to Focused Vertical Portrait Layout'}
+                className={`inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
+                  isPortraitMode
+                    ? 'bg-indigo-600 text-white border-indigo-500 shadow-md ring-2 ring-indigo-400/30 dark:bg-indigo-500 dark:border-indigo-400'
+                    : 'bg-indigo-50 text-indigo-900 border-indigo-200 hover:bg-indigo-100 dark:bg-indigo-950/80 dark:text-indigo-200 dark:border-indigo-800 dark:hover:bg-indigo-900'
+                }`}
+              >
+                {isPortraitMode ? (
+                  <>
+                    <Maximize2 className="w-3.5 h-3.5" />
+                    <span>📱 Portrait Active</span>
+                  </>
+                ) : (
+                  <>
+                    <Smartphone className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                    <span>📱 Portrait View</span>
+                  </>
+                )}
               </button>
             )}
 

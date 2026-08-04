@@ -80,10 +80,6 @@ export const NewArrivalModal: React.FC<NewArrivalModalProps> = ({
               <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">
                 Log Field Arrival / Surveillance Record
               </h3>
-              <span className="inline-flex items-center space-x-1 px-2 py-0.5 text-[10px] font-bold bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 rounded-full border border-indigo-300 dark:border-indigo-800">
-                <Database className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
-                <span>Offline Cache</span>
-              </span>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               Hirna Regional Veterinary Laboratory Surveillance Panel • Entries cached automatically for field connectivity gaps
