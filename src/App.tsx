@@ -44,8 +44,11 @@ import { HARARGHE_WOREDAS } from './data/woredas';
 import { exportToCSV } from './utils/export';
 import { loadCachedRecords, saveCachedRecords, clearCachedRecords } from './utils/storage';
 import { subscribeToFirestoreRecords, saveRecordToFirestore } from './utils/firebaseStorage';
+import { useAuth } from './contexts/AuthContext';
+import { soundEngine } from './utils/sound';
 
 export default function App() {
+  const { user, loading } = useAuth();
   const [darkMode, setDarkMode] = useState<boolean>(true);
   
   // Primary Dashboard State - Initialized from localStorage cache for field offline resilience
@@ -243,6 +246,60 @@ export default function App() {
     
   const dataMinDate = validDates.length > 0 ? validDates[0] : undefined;
   const dataMaxDate = validDates.length > 0 ? validDates[validDates.length - 1] : undefined;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-slate-950">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className={`min-h-screen font-sans transition-colors duration-200 bg-slate-100 dark:bg-slate-950 flex flex-col items-center justify-center p-4`}>
+         <div className="text-center space-y-6 max-w-md bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800">
+            <div className="mx-auto h-16 w-16 rounded-xl bg-slate-900 border border-emerald-500/50 p-2 flex items-center justify-center shadow-lg shadow-emerald-600/20">
+              <img 
+                 src="/hrvl-emblem.png" 
+                 alt="HRVL Emblem" 
+                 onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (!target.src.includes('lh3.googleusercontent.com')) {
+                    target.src = 'https://lh3.googleusercontent.com/d/1i0X8Bpdb5uoX0hP0pfbPOnzJXbymF_Oq';
+                  }
+                }}
+                className="w-full h-full object-contain" 
+               />
+            </div>
+            <div>
+              <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                Hirna RVL Analytics
+              </h1>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+                Secure access required. Please sign in to view the geospatial disease surveillance dashboard and epidemiological data.
+              </p>
+            </div>
+            
+            <button
+              onClick={() => {
+                soundEngine.playClick();
+                setIsAuthModalOpen(true);
+              }}
+              className="w-full flex justify-center items-center space-x-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition-colors cursor-pointer"
+            >
+              <ShieldCheck className="w-5 h-5" />
+              <span>Sign In to Access Dashboard</span>
+            </button>
+         </div>
+
+         <AuthModal
+           isOpen={isAuthModalOpen}
+           onClose={() => setIsAuthModalOpen(false)}
+         />
+      </div>
+    );
+  }
 
   // If printable report view is active
   if (printableReport) {
