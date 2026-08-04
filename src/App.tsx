@@ -23,6 +23,7 @@ import { ExcelImportModal } from './components/ExcelImportModal';
 import { YoYTrendAnalysisModal } from './components/YoYTrendAnalysisModal';
 import { AIReportModal } from './components/AIReportModal';
 import { PrintableReportView } from './components/PrintableReportView';
+import { AuthModal } from './components/AuthModal';
 
 import { 
   FilterState, 
@@ -112,6 +113,7 @@ export default function App() {
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isYoYModalOpen, setIsYoYModalOpen] = useState(false);
   const [isAIReportModalOpen, setIsAIReportModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [printableReport, setPrintableReport] = useState<NarrativeReport | null>(null);
 
   // Toggle Dark Class on <html> element
@@ -300,6 +302,7 @@ export default function App() {
           onOpenImportModal={() => setIsImportModalOpen(true)}
           onOpenYoYModal={() => setIsYoYModalOpen(true)}
           onOpenReportModal={() => setIsAIReportModalOpen(true)}
+          onOpenAuthModal={() => setIsAuthModalOpen(true)}
           onExportAllCSV={handleExportAllCSV}
           onToggleSimulator={() => setIsSimulatorRunning(prev => !prev)}
           isSimulatorRunning={isSimulatorRunning}
@@ -540,6 +543,10 @@ export default function App() {
         onOpenPrintView={(rep) => setPrintableReport(rep)}
       />
 
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+      />
     </div>
   );
 }

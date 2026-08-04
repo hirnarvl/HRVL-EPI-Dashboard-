@@ -23,8 +23,13 @@ import {
   Maximize2,
   Calendar
 } from 'lucide-react';
-import { FilterState, ZoneName } from '../types';
+import { 
+  FilterState, 
+  ZoneName 
+} from '../types';
 import { soundEngine } from '../utils/sound';
+import { useAuth } from '../contexts/AuthContext';
+import { UserCircle, LogOut } from 'lucide-react';
 
 interface NavbarProps {
   darkMode: boolean;
@@ -35,6 +40,7 @@ interface NavbarProps {
   onOpenImportModal: () => void;
   onOpenYoYModal: () => void;
   onOpenReportModal: () => void;
+  onOpenAuthModal: () => void;
   onExportAllCSV: () => void;
   onToggleSimulator: () => void;
   isSimulatorRunning: boolean;
@@ -69,9 +75,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   cachedRecordsCount = 0,
   onResetCache,
   dataMinDate,
-  dataMaxDate
+  dataMaxDate,
+  onOpenAuthModal
 }) => {
   const [soundEnabled, setSoundEnabled] = useState<boolean>(soundEngine.enabled);
+  const { user, logout } = useAuth();
 
   const toggleSound = () => {
     const next = !soundEnabled;
@@ -307,6 +315,38 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               {soundEnabled ? <Volume2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> : <VolumeX className="w-4 h-4 text-slate-400" />}
             </button>
+
+            {/* Auth Toggle */}
+            {user ? (
+              <div className="flex items-center gap-2 border-l border-slate-200 dark:border-slate-700 pl-2 ml-2">
+                <span className="text-xs text-slate-600 dark:text-slate-300 hidden md:inline-block max-w-[120px] truncate">
+                  {user.displayName || user.email}
+                </span>
+                <button
+                  onClick={() => {
+                    soundEngine.playClick();
+                    logout();
+                  }}
+                  title="Sign Out"
+                  className="p-1.5 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 border-l border-slate-200 dark:border-slate-700 pl-2 ml-2">
+                <button
+                  onClick={() => {
+                    soundEngine.playClick();
+                    onOpenAuthModal();
+                  }}
+                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-750 rounded-lg border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
+                >
+                  <UserCircle className="w-4 h-4" />
+                  <span>Sign In</span>
+                </button>
+              </div>
+            )}
 
             {/* Dark / Light Toggle */}
             <button
