@@ -234,6 +234,14 @@ export default function App() {
     return true;
   });
 
+  const validDates = records
+    .map(r => r.date)
+    .filter(d => Boolean(d) && !isNaN(new Date(d).getTime()))
+    .sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+    
+  const dataMinDate = validDates.length > 0 ? validDates[0] : undefined;
+  const dataMaxDate = validDates.length > 0 ? validDates[validDates.length - 1] : undefined;
+
   // If printable report view is active
   if (printableReport) {
     return (
@@ -302,6 +310,8 @@ export default function App() {
           isOnline={isOnline}
           cachedRecordsCount={records.length}
           onResetCache={handleResetCache}
+          dataMinDate={dataMinDate}
+          dataMaxDate={dataMaxDate}
         />
       </div>
 

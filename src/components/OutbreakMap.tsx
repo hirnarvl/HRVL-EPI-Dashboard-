@@ -975,7 +975,7 @@ export const OutbreakMap: React.FC<OutbreakMapProps> = ({
             <div className="flex items-center space-x-2">
               <Globe className="w-5 h-5 text-emerald-600 dark:text-emerald-400 animate-pulse" />
               <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                Geospatial Disease Surveillance & GIS Map
+                Geospatial Disease Surveillance GIS Map
               </h3>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">

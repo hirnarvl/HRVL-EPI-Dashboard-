@@ -20,7 +20,8 @@ import {
   Database,
   RotateCcw,
   Smartphone,
-  Maximize2
+  Maximize2,
+  Calendar
 } from 'lucide-react';
 import { FilterState, ZoneName } from '../types';
 import { soundEngine } from '../utils/sound';
@@ -44,6 +45,8 @@ interface NavbarProps {
   isOnline?: boolean;
   cachedRecordsCount?: number;
   onResetCache?: () => void;
+  dataMinDate?: string;
+  dataMaxDate?: string;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -64,7 +67,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   onTogglePortraitMode,
   isOnline = true,
   cachedRecordsCount = 0,
-  onResetCache
+  onResetCache,
+  dataMinDate,
+  dataMaxDate
 }) => {
   const [soundEnabled, setSoundEnabled] = useState<boolean>(soundEngine.enabled);
 
@@ -129,6 +134,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <Building2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                 <span>Regional Veterinary Laboratory • East (21) & West (15) Hararghe</span>
               </p>
+              {dataMinDate && dataMaxDate && (
+                <div className="flex items-center gap-1.5 mt-1 text-[11px] font-bold text-slate-600 dark:text-slate-300">
+                  <Calendar className="w-3.5 h-3.5 text-blue-500" />
+                  <span>Imported Data Range: {dataMinDate} to {dataMaxDate}</span>
+                </div>
+              )}
             </div>
           </div>
 
