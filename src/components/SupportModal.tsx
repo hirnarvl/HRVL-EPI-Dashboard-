@@ -33,7 +33,6 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
 
   const contactEmail = 'henz@hirnarvl.onmicrosoft.com';
   const contactPhone = '+251-93331-0270';
-  const dashboardUrl = typeof window !== 'undefined' ? window.location.origin : 'https://ais-pre-gufvs2kxdvyzddaef2h5zc-674204786888.europe-west2.run.app';
 
   const subjectText = 'Support Request Received - HRVL Data Analytic Dashboard';
 
@@ -52,8 +51,7 @@ Thank you for using the HRVL Data Analytic Dashboard to power your geospatial di
 
 Best regards,
 The HRVL Data Analytics Team
-${contactEmail} | ${contactPhone}
-${dashboardUrl}`;
+${contactEmail} | ${contactPhone}`;
 
   const handleCopySubject = () => {
     soundEngine.playSuccess();
