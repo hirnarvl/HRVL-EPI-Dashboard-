@@ -24,6 +24,7 @@ import { YoYTrendAnalysisModal } from './components/YoYTrendAnalysisModal';
 import { AIReportModal } from './components/AIReportModal';
 import { PrintableReportView } from './components/PrintableReportView';
 import { AuthModal } from './components/AuthModal';
+import { SupportModal } from './components/SupportModal';
 
 import { 
   FilterState, 
@@ -117,6 +118,7 @@ export default function App() {
   const [isYoYModalOpen, setIsYoYModalOpen] = useState(false);
   const [isAIReportModalOpen, setIsAIReportModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
   const [printableReport, setPrintableReport] = useState<NarrativeReport | null>(null);
 
   // Toggle Dark Class on <html> element
@@ -263,10 +265,11 @@ export default function App() {
               <img 
                  src="/hrvl-emblem.png" 
                  alt="HRVL Emblem" 
+                 referrerPolicy="no-referrer"
                  onError={(e) => {
                   const target = e.target as HTMLImageElement;
-                  if (!target.src.includes('lh3.googleusercontent.com')) {
-                    target.src = 'https://lh3.googleusercontent.com/d/1i0X8Bpdb5uoX0hP0pfbPOnzJXbymF_Oq';
+                  if (!target.src.includes('1lf9LiV7nEwjPS9RuPS4rM9LuBk1vAbbD')) {
+                    target.src = 'https://lh3.googleusercontent.com/d/1lf9LiV7nEwjPS9RuPS4rM9LuBk1vAbbD';
                   }
                 }}
                 className="w-full h-full object-contain" 
@@ -360,6 +363,7 @@ export default function App() {
           onOpenYoYModal={() => setIsYoYModalOpen(true)}
           onOpenReportModal={() => setIsAIReportModalOpen(true)}
           onOpenAuthModal={() => setIsAuthModalOpen(true)}
+          onOpenSupportModal={() => setIsSupportModalOpen(true)}
           onExportAllCSV={handleExportAllCSV}
           onToggleSimulator={() => setIsSimulatorRunning(prev => !prev)}
           isSimulatorRunning={isSimulatorRunning}
@@ -381,6 +385,22 @@ export default function App() {
           ? 'max-w-2xl px-3 sm:px-4 bg-slate-900/40 dark:bg-slate-900/60 rounded-3xl my-4 border border-indigo-500/20 shadow-2xl ring-1 ring-indigo-500/10' 
           : 'max-w-7xl px-4 sm:px-6 lg:px-8'
       }`}>
+
+        {/* HRVL Official Institutional Banner */}
+        <div className="w-full rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800/80 shadow-md bg-slate-900 relative group">
+          <img 
+            src="/hrvl-banner.jpg" 
+            alt="HRVL Regional Veterinary Diagnostic Laboratory Banner" 
+            referrerPolicy="no-referrer"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              if (!target.src.includes('1ljHsMIChZqPrhQu48JaLIuncTXP8FCGj')) {
+                target.src = 'https://lh3.googleusercontent.com/d/1ljHsMIChZqPrhQu48JaLIuncTXP8FCGj';
+              }
+            }}
+            className="w-full h-28 sm:h-36 md:h-44 lg:h-52 object-cover object-center group-hover:scale-[1.01] transition-transform duration-500" 
+          />
+        </div>
 
         {/* Portrait Mode Field Banner */}
         {isPortraitMode && (
@@ -603,6 +623,11 @@ export default function App() {
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
+      />
+
+      <SupportModal
+        isOpen={isSupportModalOpen}
+        onClose={() => setIsSupportModalOpen(false)}
       />
     </div>
   );

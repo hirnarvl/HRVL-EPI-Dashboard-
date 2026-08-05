@@ -87,8 +87,8 @@ export const FooterBanner: React.FC = () => {
                     referrerPolicy="no-referrer"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      if (!target.src.includes('lh3.googleusercontent.com')) {
-                        target.src = 'https://lh3.googleusercontent.com/d/1i0X8Bpdb5uoX0hP0pfbPOnzJXbymF_Oq';
+                      if (!target.src.includes('1lf9LiV7nEwjPS9RuPS4rM9LuBk1vAbbD')) {
+                        target.src = 'https://lh3.googleusercontent.com/d/1lf9LiV7nEwjPS9RuPS4rM9LuBk1vAbbD';
                       }
                     }}
                     className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300 drop-shadow-lg" 

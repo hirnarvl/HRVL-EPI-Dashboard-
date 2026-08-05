@@ -1668,6 +1668,13 @@ export const OutbreakMap: React.FC<OutbreakMapProps> = ({
                     <img 
                       src="/hrvl-emblem.png" 
                       alt="HRVL Emblem" 
+                      referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        if (!target.src.includes('1lf9LiV7nEwjPS9RuPS4rM9LuBk1vAbbD')) {
+                          target.src = 'https://lh3.googleusercontent.com/d/1lf9LiV7nEwjPS9RuPS4rM9LuBk1vAbbD';
+                        }
+                      }}
                       className="w-full h-full object-contain"
                     />
                   </div>

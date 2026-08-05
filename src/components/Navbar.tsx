@@ -21,7 +21,8 @@ import {
   RotateCcw,
   Smartphone,
   Maximize2,
-  Calendar
+  Calendar,
+  HelpCircle
 } from 'lucide-react';
 import { 
   FilterState, 
@@ -41,6 +42,7 @@ interface NavbarProps {
   onOpenYoYModal: () => void;
   onOpenReportModal: () => void;
   onOpenAuthModal: () => void;
+  onOpenSupportModal?: () => void;
   onExportAllCSV: () => void;
   onToggleSimulator: () => void;
   isSimulatorRunning: boolean;
@@ -76,7 +78,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onResetCache,
   dataMinDate,
   dataMaxDate,
-  onOpenAuthModal
+  onOpenAuthModal,
+  onOpenSupportModal
 }) => {
   const [soundEnabled, setSoundEnabled] = useState<boolean>(soundEngine.enabled);
   const { user, logout } = useAuth();
@@ -98,10 +101,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               <img 
                 src="/hrvl-emblem.png" 
                 alt="HRVL Emblem" 
+                referrerPolicy="no-referrer"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
-                  if (!target.src.includes('lh3.googleusercontent.com')) {
-                    target.src = 'https://lh3.googleusercontent.com/d/1i0X8Bpdb5uoX0hP0pfbPOnzJXbymF_Oq';
+                  if (!target.src.includes('1lf9LiV7nEwjPS9RuPS4rM9LuBk1vAbbD')) {
+                    target.src = 'https://lh3.googleusercontent.com/d/1lf9LiV7nEwjPS9RuPS4rM9LuBk1vAbbD';
                   }
                 }}
                 className="w-full h-full object-contain" 
@@ -240,6 +244,21 @@ export const Navbar: React.FC<NavbarProps> = ({
               <FileText className="w-3.5 h-3.5" />
               <span>AI SitRep Report</span>
             </button>
+
+            {/* Support Email Template Button */}
+            {onOpenSupportModal && (
+              <button
+                onClick={() => {
+                  soundEngine.playClick();
+                  onOpenSupportModal();
+                }}
+                title="View & Copy Support Email Template (+251-93331-0270 / henz@hirnarvl.onmicrosoft.com)"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold text-amber-900 bg-amber-400 hover:bg-amber-300 dark:text-amber-100 dark:bg-amber-600/80 dark:hover:bg-amber-500 rounded-lg border border-amber-500/50 shadow-xs transition-all cursor-pointer"
+              >
+                <HelpCircle className="w-3.5 h-3.5" />
+                <span>Support Template</span>
+              </button>
+            )}
 
             {/* Reset Cache / Defaults Button */}
             {onResetCache && (
