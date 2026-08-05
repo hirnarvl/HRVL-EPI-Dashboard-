@@ -105,51 +105,51 @@ export const OutbreakTable: React.FC<OutbreakTableProps> = ({ outbreaks }) => {
         <table className="w-full text-left text-xs text-slate-700 dark:text-slate-200">
           <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 uppercase font-semibold text-[11px] border-b border-slate-200 dark:border-slate-700">
             <tr>
-              <th className="py-2.5 px-3">Code</th>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('disease')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 text-center font-bold">Code</th>
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('disease')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Disease</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('woreda')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('woreda')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Woreda / Zone</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('status')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('status')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Status</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('cases')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('cases')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Cases</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('deaths')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('deaths')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Deaths</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3 cursor-pointer text-blue-600 dark:text-blue-400" onClick={() => handleSort('morbidityRate')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-blue-600 dark:text-blue-400 text-center font-bold" onClick={() => handleSort('morbidityRate')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Morbidity %</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3 cursor-pointer text-rose-600 dark:text-rose-400" onClick={() => handleSort('mortalityRate')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-rose-600 dark:text-rose-400 text-center font-bold" onClick={() => handleSort('mortalityRate')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Mortality %</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3 cursor-pointer text-red-600 dark:text-red-400" onClick={() => handleSort('cfr')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-red-600 dark:text-red-400 text-center font-bold" onClick={() => handleSort('cfr')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>CFR %</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
@@ -229,7 +229,7 @@ export const OutbreakTable: React.FC<OutbreakTableProps> = ({ outbreaks }) => {
           >
             Prev
           </button>
-          <div className="flex items-center space-x-1">
+          <div className="flex items-center justify-center space-x-1">
             <span>Page</span>
             <select
               value={currentPage}

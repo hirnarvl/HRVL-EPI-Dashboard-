@@ -167,13 +167,13 @@ export const PrintableReportView: React.FC<PrintableReportViewProps> = ({
             <table className="w-full text-left text-xs border border-slate-300">
               <thead className="bg-slate-100 text-slate-700 uppercase text-[10px]">
                 <tr>
-                  <th className="p-2 border">Code</th>
-                  <th className="p-2 border">Disease</th>
-                  <th className="p-2 border">Woreda / Zone</th>
-                  <th className="p-2 border">Cases</th>
-                  <th className="p-2 border">Deaths</th>
-                  <th className="p-2 border">CFR %</th>
-                  <th className="p-2 border">Status</th>
+                  <th className="p-2 border text-center font-bold">Code</th>
+                  <th className="p-2 border text-center font-bold">Disease</th>
+                  <th className="p-2 border text-center font-bold">Woreda / Zone</th>
+                  <th className="p-2 border text-center font-bold">Cases</th>
+                  <th className="p-2 border text-center font-bold">Deaths</th>
+                  <th className="p-2 border text-center font-bold">CFR %</th>
+                  <th className="p-2 border text-center font-bold">Status</th>
                 </tr>
               </thead>
               <tbody>

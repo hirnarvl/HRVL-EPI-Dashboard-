@@ -25,6 +25,8 @@ import { AIReportModal } from './components/AIReportModal';
 import { PrintableReportView } from './components/PrintableReportView';
 import { AuthModal } from './components/AuthModal';
 import { SupportModal } from './components/SupportModal';
+import { ExternalResourcesModal } from './components/ExternalResourcesModal';
+import { GoogleDriveModal } from './components/GoogleDriveModal';
 
 import { 
   FilterState, 
@@ -120,6 +122,7 @@ export default function App() {
   const [isAIReportModalOpen, setIsAIReportModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
+  const [isGoogleDriveOpen, setIsGoogleDriveOpen] = useState(false);
   const [printableReport, setPrintableReport] = useState<NarrativeReport | null>(null);
 
   // Toggle Dark Class on <html> element
@@ -365,6 +368,7 @@ export default function App() {
           onOpenReportModal={() => setIsAIReportModalOpen(true)}
           onOpenAuthModal={() => setIsAuthModalOpen(true)}
           onOpenSupportModal={() => setIsSupportModalOpen(true)}
+          onOpenGoogleDrive={() => setIsGoogleDriveOpen(true)}
           onExportAllCSV={handleExportAllCSV}
           onToggleSimulator={() => setIsSimulatorRunning(prev => !prev)}
           isSimulatorRunning={isSimulatorRunning}
@@ -633,6 +637,13 @@ export default function App() {
       <SupportModal
         isOpen={isSupportModalOpen}
         onClose={() => setIsSupportModalOpen(false)}
+      />
+
+      <GoogleDriveModal
+        isOpen={isGoogleDriveOpen}
+        onClose={() => setIsGoogleDriveOpen(false)}
+        records={records}
+        onImportRecords={handleImportRecords}
       />
     </div>
   );

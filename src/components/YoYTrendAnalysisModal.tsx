@@ -621,14 +621,14 @@ export const YoYTrendAnalysisModal: React.FC<YoYTrendAnalysisModalProps> = ({
               <table className="w-full text-left text-xs text-slate-700 dark:text-slate-200">
                 <thead className="bg-slate-100 dark:bg-slate-800 uppercase font-bold text-[10px] text-slate-600 dark:text-slate-400">
                   <tr>
-                    <th className="py-2.5 px-3">Woreda Name</th>
-                    <th className="py-2.5 px-3">Zone</th>
-                    <th className="py-2.5 px-3 font-mono">2023</th>
-                    <th className="py-2.5 px-3 font-mono">2024</th>
-                    <th className="py-2.5 px-3 font-mono">2025</th>
-                    <th className="py-2.5 px-3 font-mono">2026</th>
-                    <th className="py-2.5 px-3">YoY Direction</th>
-                    <th className="py-2.5 px-3">Primary Pathogen</th>
+                    <th className="py-2.5 px-3 text-center font-bold">Woreda Name</th>
+                    <th className="py-2.5 px-3 text-center font-bold">Zone</th>
+                    <th className="py-2.5 px-3 font-mono text-center font-bold">2023</th>
+                    <th className="py-2.5 px-3 font-mono text-center font-bold">2024</th>
+                    <th className="py-2.5 px-3 font-mono text-center font-bold">2025</th>
+                    <th className="py-2.5 px-3 font-mono text-center font-bold">2026</th>
+                    <th className="py-2.5 px-3 text-center font-bold">YoY Direction</th>
+                    <th className="py-2.5 px-3 text-center font-bold">Primary Pathogen</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200 dark:divide-slate-700/60">

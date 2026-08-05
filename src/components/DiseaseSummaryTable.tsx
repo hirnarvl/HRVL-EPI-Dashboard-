@@ -101,44 +101,44 @@ export const DiseaseSummaryTable: React.FC<DiseaseSummaryTableProps> = ({ summar
         <table className="w-full text-left text-xs text-slate-700 dark:text-slate-200">
           <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 uppercase font-semibold text-[11px] border-b border-slate-200 dark:border-slate-700">
             <tr>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('disease')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('disease')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Disease Name</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('totalOutbreaks')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('totalOutbreaks')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Outbreaks</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('totalCases')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('totalCases')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Total Cases</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('totalDeaths')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('totalDeaths')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Deaths</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('morbidityPercent')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('morbidityPercent')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Morbidity %</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('cfrPercent')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('cfrPercent')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>CFR %</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3">Primary Species</th>
-              <th className="py-2.5 px-3">Risk Level</th>
+              <th className="py-2.5 px-3 text-center font-bold">Primary Species</th>
+              <th className="py-2.5 px-3 text-center font-bold">Risk Level</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
@@ -215,7 +215,7 @@ export const DiseaseSummaryTable: React.FC<DiseaseSummaryTableProps> = ({ summar
             Prev
           </button>
           
-          <div className="flex items-center space-x-1">
+          <div className="flex items-center justify-center space-x-1">
             <span>Page</span>
             <select
               value={currentPage}

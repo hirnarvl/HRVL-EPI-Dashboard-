@@ -143,7 +143,7 @@ export const ComplianceTable: React.FC<ComplianceTableProps> = ({ complianceList
                 complianceCategory === 'Chronic Non-Reporting' ? 'bg-rose-600 text-white shadow-2xs' : 'text-rose-700 dark:text-rose-400 font-bold'
               }`}
             >
-              🚨 Chronic Non-Reporting (&lt;50%)
+              Non-Reporting (&lt;50%)
             </button>
           </div>
 
@@ -202,28 +202,28 @@ export const ComplianceTable: React.FC<ComplianceTableProps> = ({ complianceList
         <table className="w-full text-left text-xs text-slate-700 dark:text-slate-200">
           <thead className="sticky top-0 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 uppercase font-semibold text-[11px] border-b border-slate-200 dark:border-slate-700 z-10">
             <tr>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('woreda')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('woreda')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Woreda Name</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('zone')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('zone')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Zone</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3">Submissions (Actual / Expected)</th>
-              <th className="py-2.5 px-3 cursor-pointer w-48" onClick={() => handleSort('complianceRate')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 text-center font-bold">Submissions (Actual / Expected)</th>
+              <th className="py-2.5 px-3 cursor-pointer w-48 text-center font-bold" onClick={() => handleSort('complianceRate')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Compliance Progress %</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3">Last Submission</th>
-              <th className="py-2.5 px-3">Compliance Status</th>
-              <th className="py-2.5 px-3 text-right">Drill-Down Inspection</th>
+              <th className="py-2.5 px-3 text-center font-bold">Last Submission</th>
+              <th className="py-2.5 px-3 text-center font-bold">Compliance Status</th>
+              <th className="py-2.5 px-3 text-center font-bold">Drill-Down Inspection</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
@@ -334,7 +334,7 @@ export const ComplianceTable: React.FC<ComplianceTableProps> = ({ complianceList
           >
             Prev
           </button>
-          <div className="flex items-center space-x-1">
+          <div className="flex items-center justify-center space-x-1">
             <span>Page</span>
             <select
               value={currentPage}

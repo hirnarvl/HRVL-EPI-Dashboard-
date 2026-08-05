@@ -126,45 +126,45 @@ export const SurveillanceTable: React.FC<SurveillanceTableProps> = ({ records })
         <table className="w-full text-left text-xs text-slate-700 dark:text-slate-200">
           <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 uppercase font-semibold text-[11px] border-b border-slate-200 dark:border-slate-700">
             <tr>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('date')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('date')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Date</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('woreda')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('woreda')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Woreda</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('zone')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('zone')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Zone</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('disease')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('disease')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Disease / Event</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3">Species</th>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('cases')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 text-center font-bold">Species</th>
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('cases')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Cases</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3 cursor-pointer" onClick={() => handleSort('deaths')}>
-                <div className="flex items-center space-x-1">
+              <th className="py-2.5 px-3 cursor-pointer text-center font-bold" onClick={() => handleSort('deaths')}>
+                <div className="flex items-center justify-center space-x-1">
                   <span>Deaths</span>
                   <ArrowUpDown className="w-3 h-3 opacity-60" />
                 </div>
               </th>
-              <th className="py-2.5 px-3">Reporter</th>
-              <th className="py-2.5 px-3">Risk</th>
+              <th className="py-2.5 px-3 text-center font-bold">Reporter</th>
+              <th className="py-2.5 px-3 text-center font-bold">Risk</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
@@ -259,7 +259,7 @@ export const SurveillanceTable: React.FC<SurveillanceTableProps> = ({ records })
             Prev
           </button>
           
-          <div className="flex items-center space-x-1">
+          <div className="flex items-center justify-center space-x-1">
             <span>Page</span>
             <select
               value={currentPage}

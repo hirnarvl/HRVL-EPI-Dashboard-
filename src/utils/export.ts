@@ -1,5 +1,5 @@
-export function exportToCSV(filename: string, rows: Record<string, any>[]) {
-  if (!rows || !rows.length) return;
+export function generateCSVString(rows: Record<string, any>[]): string {
+  if (!rows || !rows.length) return '';
   const keys = Object.keys(rows[0]);
   const header = keys.join(',');
 
@@ -19,7 +19,14 @@ export function exportToCSV(filename: string, rows: Record<string, any>[]) {
     )
     .join('\n');
 
-  const blob = new Blob([`${header}\n${csvContent}`], { type: 'text/csv;charset=utf-8;' });
+  return `${header}\n${csvContent}`;
+}
+
+export function exportToCSV(filename: string, rows: Record<string, any>[]) {
+  const content = generateCSVString(rows);
+  if (!content) return;
+
+  const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.setAttribute('href', url);

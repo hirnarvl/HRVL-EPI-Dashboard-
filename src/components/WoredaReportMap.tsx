@@ -285,19 +285,19 @@ export const WoredaReportMap: React.FC<WoredaReportMapProps> = ({
                 Disease Density Legend
               </span>
               <div className="grid grid-cols-2 gap-x-2 gap-y-0.5">
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center justify-center space-x-1">
                   <span className="w-2 h-2 rounded-full bg-purple-600"></span>
                   <span>Extreme (&ge;50)</span>
                 </div>
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center justify-center space-x-1">
                   <span className="w-2 h-2 rounded-full bg-red-600"></span>
                   <span>High (25–49)</span>
                 </div>
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center justify-center space-x-1">
                   <span className="w-2 h-2 rounded-full bg-orange-500"></span>
                   <span>Mod (10–24)</span>
                 </div>
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center justify-center space-x-1">
                   <span className="w-2 h-2 rounded-full bg-amber-400"></span>
                   <span>Low (1–9)</span>
                 </div>
@@ -315,12 +315,12 @@ export const WoredaReportMap: React.FC<WoredaReportMapProps> = ({
           <table className="w-full text-left text-xs font-sans">
             <thead className="bg-slate-100 text-slate-700 font-bold uppercase text-[10px]">
               <tr>
-                <th className="p-2.5 border-b border-r">Woreda Name</th>
-                <th className="p-2.5 border-b border-r">Zone</th>
-                <th className="p-2.5 border-b border-r">Total Cases</th>
-                <th className="p-2.5 border-b border-r">Fatalities</th>
-                <th className="p-2.5 border-b border-r">Primary Disease</th>
-                <th className="p-2.5 border-b">Active Outbreaks</th>
+                <th className="p-2.5 border-b border-r text-center font-bold">Woreda Name</th>
+                <th className="p-2.5 border-b border-r text-center font-bold">Zone</th>
+                <th className="p-2.5 border-b border-r text-center font-bold">Total Cases</th>
+                <th className="p-2.5 border-b border-r text-center font-bold">Fatalities</th>
+                <th className="p-2.5 border-b border-r text-center font-bold">Primary Disease</th>
+                <th className="p-2.5 border-b text-center font-bold">Active Outbreaks</th>
               </tr>
             </thead>
             <tbody>

@@ -22,7 +22,9 @@ import {
   Smartphone,
   Maximize2,
   Calendar,
-  HelpCircle
+  HelpCircle,
+  Globe,
+  HardDrive
 } from 'lucide-react';
 import { 
   FilterState, 
@@ -45,6 +47,8 @@ interface NavbarProps {
   onOpenReportModal: () => void;
   onOpenAuthModal: () => void;
   onOpenSupportModal?: () => void;
+  onOpenExternalResources?: () => void;
+  onOpenGoogleDrive?: () => void;
   onExportAllCSV: () => void;
   onToggleSimulator: () => void;
   isSimulatorRunning: boolean;
@@ -82,6 +86,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   dataMaxDate,
   onOpenAuthModal,
   onOpenSupportModal,
+  onOpenExternalResources,
+  onOpenGoogleDrive,
   activeTab = 'Dashboard',
   setActiveTab
 }) => {
@@ -272,6 +278,38 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span>AI SitRep Report</span>
             </button>
 
+            
+
+            {/* Google Drive Button */}
+            {onOpenGoogleDrive && (
+              <button
+                onClick={() => {
+                  soundEngine.playClick();
+                  onOpenGoogleDrive();
+                }}
+                title="Backup & Import Reports via Google Drive Cloud Integration"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold text-blue-900 bg-blue-100 hover:bg-blue-200 dark:text-blue-100 dark:bg-blue-900/80 dark:hover:bg-blue-800 rounded-lg border border-blue-400/50 shadow-xs transition-all cursor-pointer"
+              >
+                <HardDrive className="w-3.5 h-3.5 text-blue-600 dark:text-blue-300" />
+                <span>Google Drive</span>
+              </button>
+            )}
+
+            {/* External Resources Button */}
+            {onOpenExternalResources && (
+              <button
+                onClick={() => {
+                  soundEngine.playClick();
+                  onOpenExternalResources();
+                }}
+                title="External Veterinary Information & Resources"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold text-indigo-900 bg-indigo-200 hover:bg-indigo-300 dark:text-indigo-100 dark:bg-indigo-600/80 dark:hover:bg-indigo-500 rounded-lg border border-indigo-500/50 shadow-xs transition-all cursor-pointer"
+              >
+                <Globe className="w-3.5 h-3.5" />
+                <span>External Info Links</span>
+              </button>
+            )}
+
             {/* Support Email Template Button */}
             {onOpenSupportModal && (
               <button
@@ -365,7 +403,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Auth Toggle */}
             {user ? (
               <div className="flex items-center gap-2 border-l border-slate-200 dark:border-slate-700 pl-2 ml-2">
-                <span className="text-xs text-slate-600 dark:text-slate-300 hidden md:inline-block max-w-[120px] truncate">
+                {user.photoURL ? (
+                  <img src={user.photoURL} alt="Profile" className="w-6 h-6 rounded-full border border-slate-300 dark:border-slate-600 object-cover" />
+                ) : (
+                  <UserCircle className="w-5 h-5 text-slate-500" />
+                )}
+                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 max-w-[120px] truncate">
                   {user.displayName || user.email}
                 </span>
                 <button
