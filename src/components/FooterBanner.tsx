@@ -80,15 +80,15 @@ export const FooterBanner: React.FC = () => {
                 className="flex items-center space-x-3 bg-slate-900/90 backdrop-blur-md p-2.5 rounded-2xl border border-amber-500/40 group-hover:border-amber-400 group-hover:shadow-[0_0_24px_rgba(212,175,55,0.35)] transition-all duration-300 shadow-xl shadow-black/50"
               >
                 {/* Official Google Drive HRVL Emblem Image Seal */}
-                <div className="w-16 h-16 rounded-xl bg-slate-950/90 p-1 shadow-md flex items-center justify-center shrink-0 overflow-hidden border border-amber-500/50 group-hover:border-amber-400">
+                <div className="w-16 h-16 rounded-xl bg-slate-900 border-2 border-emerald-500/50 p-0.5 flex items-center justify-center shadow-[0_4px_15px_rgba(16,185,129,0.4)] group-hover:shadow-[0_8px_25px_rgba(16,185,129,0.6)] transform group-hover:-translate-y-1 transition-all duration-300 shrink-0 overflow-hidden">
                   <img 
                     src="/hrvl-emblem.png" 
                     alt="Hirna Regional Veterinary Diagnostic Laboratory Emblem" 
                     referrerPolicy="no-referrer"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      if (!target.src.includes('1lf9LiV7nEwjPS9RuPS4rM9LuBk1vAbbD')) {
-                        target.src = 'https://lh3.googleusercontent.com/d/1lf9LiV7nEwjPS9RuPS4rM9LuBk1vAbbD';
+                      if (!target.src.includes('1B-I4DeFvksl-bfA9KXPemqmEx7efTI8C')) {
+                        target.src = 'https://lh3.googleusercontent.com/d/1B-I4DeFvksl-bfA9KXPemqmEx7efTI8C';
                       }
                     }}
                     className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300 drop-shadow-lg" 

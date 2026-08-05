@@ -3,6 +3,18 @@ import { Search, ArrowUpDown, Download, Flame } from 'lucide-react';
 import { Outbreak } from '../types';
 import { exportToCSV } from '../utils/export';
 
+
+const shortenDisease = (disease: string) => {
+  if (!disease) return '';
+  const match = disease.match(/\((.*?)\)/);
+  if (match && match[1]) {
+    if (match[1] === 'Zero Reporting') return 'None';
+    return match[1];
+  }
+  return disease;
+};
+
+
 interface OutbreakTableProps {
   outbreaks: Outbreak[];
 }
@@ -11,6 +23,8 @@ export const OutbreakTable: React.FC<OutbreakTableProps> = ({ outbreaks }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState<keyof Outbreak>('cases');
   const [sortAsc, setSortAsc] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(50);
 
   const handleSort = (field: keyof Outbreak) => {
     if (sortField === field) {
@@ -38,6 +52,9 @@ export const OutbreakTable: React.FC<OutbreakTableProps> = ({ outbreaks }) => {
     }
     return sortAsc ? Number(valA) - Number(valB) : Number(valB) - Number(valA);
   });
+
+  const totalPages = Math.ceil(sorted.length / itemsPerPage) || 1;
+  const paginated = sorted.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleExportCSV = () => {
     exportToCSV('HRVL_Active_Outbreaks', sorted);
@@ -140,13 +157,13 @@ export const OutbreakTable: React.FC<OutbreakTableProps> = ({ outbreaks }) => {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
-            {sorted.map((ob) => (
+            {paginated.map((ob) => (
               <tr key={ob.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                 <td className="py-2.5 px-3 font-mono font-bold text-slate-800 dark:text-slate-200">
                   {ob.outbreakCode}
                 </td>
                 <td className="py-2.5 px-3 font-bold text-slate-900 dark:text-white">
-                  {ob.disease}
+                  {shortenDisease(ob.disease)}
                 </td>
                 <td className="py-2.5 px-3 font-medium">
                   {ob.woreda} <span className="text-slate-400">({ob.zone})</span>
@@ -183,6 +200,57 @@ export const OutbreakTable: React.FC<OutbreakTableProps> = ({ outbreaks }) => {
         </table>
       </div>
 
+      {/* Pagination */}
+      <div className="flex flex-col sm:flex-row items-center justify-between pt-3 mt-2 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 gap-2">
+        <div className="flex items-center space-x-4">
+          <span>Showing {paginated.length} of {sorted.length} records</span>
+          <div className="flex items-center space-x-2">
+            <span>Rows:</span>
+            <select
+              value={itemsPerPage}
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-1 py-0.5 text-slate-700 dark:text-slate-300 focus:outline-none"
+            >
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={30}>30</option>
+              <option value={50}>50</option>
+            </select>
+          </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            className="px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700 disabled:opacity-50 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800"
+          >
+            Prev
+          </button>
+          <div className="flex items-center space-x-1">
+            <span>Page</span>
+            <select
+              value={currentPage}
+              onChange={(e) => setCurrentPage(Number(e.target.value))}
+              className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-1 py-0.5 text-slate-700 dark:text-slate-300 focus:outline-none font-semibold"
+            >
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+                <option key={p} value={p}>{p}</option>
+              ))}
+            </select>
+            <span>of {totalPages}</span>
+          </div>
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            className="px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700 disabled:opacity-50 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800"
+          >
+            Next
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1664,15 +1664,15 @@ export const OutbreakMap: React.FC<OutbreakMapProps> = ({
             <div className="h-full flex flex-col justify-between p-1 space-y-4">
               <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
                 <div className="flex items-center space-x-3 text-emerald-600 dark:text-emerald-400 border-b border-slate-100 dark:border-slate-800 pb-2.5">
-                  <div className="w-10 h-10 bg-slate-900 rounded-xl p-1 border border-emerald-500/50 flex items-center justify-center shrink-0 shadow-sm">
+                  <div className="w-10 h-10 bg-slate-900 rounded-xl p-0.5 border border-emerald-500/50 flex items-center justify-center shrink-0 shadow-[0_4px_15px_rgba(16,185,129,0.4)] hover:shadow-[0_8px_25px_rgba(16,185,129,0.6)] transform hover:-translate-y-1 transition-all duration-300">
                     <img 
                       src="/hrvl-emblem.png" 
                       alt="HRVL Emblem" 
                       referrerPolicy="no-referrer"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        if (!target.src.includes('1lf9LiV7nEwjPS9RuPS4rM9LuBk1vAbbD')) {
-                          target.src = 'https://lh3.googleusercontent.com/d/1lf9LiV7nEwjPS9RuPS4rM9LuBk1vAbbD';
+                        if (!target.src.includes('1B-I4DeFvksl-bfA9KXPemqmEx7efTI8C')) {
+                          target.src = 'https://lh3.googleusercontent.com/d/1B-I4DeFvksl-bfA9KXPemqmEx7efTI8C';
                         }
                       }}
                       className="w-full h-full object-contain"

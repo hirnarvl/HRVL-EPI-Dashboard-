@@ -1,7 +1,21 @@
 import React, { useState } from 'react';
-import { Search, ArrowUpDown, Download, CheckCircle2, AlertTriangle, Filter } from 'lucide-react';
+import { Search, ArrowUpDown, Download, CheckCircle2, AlertTriangle, Filter ,
+  PhoneCall
+} from 'lucide-react';
 import { SurveillanceRecord } from '../types';
 import { exportToCSV } from '../utils/export';
+
+
+const shortenDisease = (disease: string) => {
+  if (!disease) return '';
+  const match = disease.match(/\((.*?)\)/);
+  if (match && match[1]) {
+    if (match[1] === 'Zero Reporting') return 'None';
+    return match[1];
+  }
+  return disease;
+};
+
 
 interface SurveillanceTableProps {
   records: SurveillanceRecord[];
@@ -13,7 +27,7 @@ export const SurveillanceTable: React.FC<SurveillanceTableProps> = ({ records })
   const [sortField, setSortField] = useState<keyof SurveillanceRecord>('date');
   const [sortAsc, setSortAsc] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
+  const [itemsPerPage, setItemsPerPage] = useState(50);
 
   const handleSort = (field: keyof SurveillanceRecord) => {
     if (sortField === field) {
@@ -178,7 +192,7 @@ export const SurveillanceTable: React.FC<SurveillanceTableProps> = ({ records })
                       <span>Zero Report</span>
                     </span>
                   ) : (
-                    <span className="font-bold text-slate-800 dark:text-slate-200">{rec.disease}</span>
+                    <span className="font-bold text-slate-800 dark:text-slate-200">{shortenDisease(rec.disease)}</span>
                   )}
                 </td>
                 <td className="py-2.5 px-3 font-medium text-slate-600 dark:text-slate-300">
@@ -191,7 +205,11 @@ export const SurveillanceTable: React.FC<SurveillanceTableProps> = ({ records })
                   {rec.deaths}
                 </td>
                 <td className="py-2.5 px-3 text-slate-500 dark:text-slate-400 text-[11px]">
-                  {rec.reporter || 'Field Agent'}
+                  <div className="font-semibold">{rec.reporter || 'Field Agent'}</div>
+                  <div className="flex items-center gap-1 mt-0.5 text-[10px] text-slate-400">
+                    <PhoneCall className="w-2.5 h-2.5" />
+                    <span>{rec.phone || '*'}</span>
+                  </div>
                 </td>
                 <td className="py-2.5 px-3">
                   <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold ${
@@ -210,28 +228,60 @@ export const SurveillanceTable: React.FC<SurveillanceTableProps> = ({ records })
         </table>
       </div>
 
+      
       {/* Pagination */}
-      <div className="flex items-center justify-between pt-3 mt-2 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500">
-        <span>Showing {paginated.length} of {sorted.length} records</span>
-        <div className="flex items-center space-x-1">
+      <div className="flex flex-col sm:flex-row items-center justify-between pt-3 mt-2 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 gap-2">
+        <div className="flex items-center space-x-4">
+          <span>Showing {paginated.length} of {sorted.length} records</span>
+          <div className="flex items-center space-x-2">
+            <span>Rows:</span>
+            <select
+              value={itemsPerPage}
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-1 py-0.5 text-slate-700 dark:text-slate-300 focus:outline-none cursor-pointer"
+            >
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={30}>30</option>
+              <option value={50}>50</option>
+            </select>
+          </div>
+        </div>
+        <div className="flex items-center space-x-2">
           <button
             disabled={currentPage === 1}
             onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-            className="px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700 disabled:opacity-50 cursor-pointer"
+            className="px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700 disabled:opacity-50 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800"
           >
             Prev
           </button>
-          <span className="px-2 font-semibold text-slate-700 dark:text-slate-300">{currentPage} / {totalPages}</span>
+          
+          <div className="flex items-center space-x-1">
+            <span>Page</span>
+            <select
+              value={currentPage}
+              onChange={(e) => setCurrentPage(Number(e.target.value))}
+              className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-1 py-0.5 text-slate-700 dark:text-slate-300 focus:outline-none font-semibold cursor-pointer"
+            >
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+                <option key={p} value={p}>{p}</option>
+              ))}
+            </select>
+            <span>of {totalPages}</span>
+          </div>
+
           <button
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-            className="px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700 disabled:opacity-50 cursor-pointer"
+            className="px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700 disabled:opacity-50 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800"
           >
             Next
           </button>
         </div>
       </div>
-
     </div>
   );
 };

@@ -3,6 +3,18 @@ import { Activity, Printer, Download, ShieldCheck, MapPin, ArrowLeft } from 'luc
 import { NarrativeReport, Outbreak, SurveillanceRecord } from '../types';
 import { WoredaReportMap } from './WoredaReportMap';
 
+
+const shortenDisease = (disease: string) => {
+  if (!disease) return '';
+  const match = disease.match(/\((.*?)\)/);
+  if (match && match[1]) {
+    if (match[1] === 'Zero Reporting') return 'None';
+    return match[1];
+  }
+  return disease;
+};
+
+
 interface PrintableReportViewProps {
   report: NarrativeReport;
   outbreaks: Outbreak[];
@@ -51,18 +63,29 @@ export const PrintableReportView: React.FC<PrintableReportViewProps> = ({
       {/* Official Printable Report Document Body */}
       <div className="max-w-4xl mx-auto bg-white text-slate-900 p-8 sm:p-12 shadow-xl border border-slate-300 rounded-none font-serif leading-relaxed text-sm print:shadow-none print:border-none print:p-0 print:max-w-none">
         
+        
+        {/* Report Official Banner */}
+        <div className="w-full h-32 md:h-40 overflow-hidden mb-6 rounded-lg border border-slate-300 print:rounded-none print:border-none shadow-md print:shadow-none">
+          <img 
+            src="https://lh3.googleusercontent.com/d/1ljHsMIChZqPrhQu48JaLIuncTXP8FCGj" 
+            alt="HRVL Banner" 
+            referrerPolicy="no-referrer"
+            className="w-full h-full object-cover"
+          />
+        </div>
+
         {/* Document Header Seal */}
         <div className="flex items-center justify-between border-b-2 border-emerald-800 pb-6 mb-8">
           <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 rounded-xl bg-slate-900 text-white flex items-center justify-center p-1.5 shadow-md border-2 border-emerald-700 shrink-0">
+            <div className="w-16 h-16 rounded-xl bg-slate-900 text-white flex items-center justify-center p-0.5 shadow-[0_4px_15px_rgba(16,185,129,0.4)] hover:shadow-[0_8px_25px_rgba(16,185,129,0.6)] transform hover:-translate-y-1 transition-all duration-300 border-2 border-emerald-500/50 shrink-0">
               <img 
                 src="/hrvl-emblem.png" 
                 alt="HRVL Emblem" 
                 referrerPolicy="no-referrer"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
-                  if (!target.src.includes('1lf9LiV7nEwjPS9RuPS4rM9LuBk1vAbbD')) {
-                    target.src = 'https://lh3.googleusercontent.com/d/1lf9LiV7nEwjPS9RuPS4rM9LuBk1vAbbD';
+                  if (!target.src.includes('1B-I4DeFvksl-bfA9KXPemqmEx7efTI8C')) {
+                    target.src = 'https://lh3.googleusercontent.com/d/1B-I4DeFvksl-bfA9KXPemqmEx7efTI8C';
                   }
                 }}
                 className="w-full h-full object-contain" 
@@ -157,7 +180,7 @@ export const PrintableReportView: React.FC<PrintableReportViewProps> = ({
                 {outbreaks.map((ob, idx) => (
                   <tr key={idx} className="border-t">
                     <td className="p-2 border font-mono">{ob.outbreakCode}</td>
-                    <td className="p-2 border font-bold">{ob.disease}</td>
+                    <td className="p-2 border font-bold">{shortenDisease(ob.disease)}</td>
                     <td className="p-2 border">{ob.woreda} ({ob.zone})</td>
                     <td className="p-2 border font-bold">{ob.cases}</td>
                     <td className="p-2 border text-rose-700 font-bold">{ob.deaths}</td>

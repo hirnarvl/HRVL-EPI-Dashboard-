@@ -19,16 +19,21 @@ import {
 import { WoredaCompliance } from '../types';
 import { exportToCSV } from '../utils/export';
 
+import { SurveillanceRecord } from '../types';
+
 interface ComplianceTableProps {
+  records?: SurveillanceRecord[];
   complianceList: WoredaCompliance[];
 }
 
-export const ComplianceTable: React.FC<ComplianceTableProps> = ({ complianceList }) => {
+export const ComplianceTable: React.FC<ComplianceTableProps> = ({ complianceList, records }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [zoneFilter, setZoneFilter] = useState<'All' | 'E/H' | 'W/H'>('All');
   const [complianceCategory, setComplianceCategory] = useState<'All' | 'Compliant' | 'Needs Attention' | 'Chronic Non-Reporting'>('All');
   const [sortField, setSortField] = useState<keyof WoredaCompliance>('complianceRate');
   const [sortAsc, setSortAsc] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(50);
   const [drilledWoreda, setDrilledWoreda] = useState<WoredaCompliance | null>(null);
   const [alertSentStatus, setAlertSentStatus] = useState<string | null>(null);
 
@@ -64,6 +69,9 @@ export const ComplianceTable: React.FC<ComplianceTableProps> = ({ complianceList
     }
     return sortAsc ? Number(valA) - Number(valB) : Number(valB) - Number(valA);
   });
+
+  const totalPages = Math.ceil(sorted.length / itemsPerPage) || 1;
+  const paginated = sorted.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleExportCSV = () => {
     exportToCSV('HRVL_Woreda_Compliance_36_Woredas', sorted);
@@ -219,7 +227,7 @@ export const ComplianceTable: React.FC<ComplianceTableProps> = ({ complianceList
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
-            {sorted.map((item, idx) => {
+            {paginated.map((item, idx) => {
               const rate = item.complianceRate;
               const isChronic = rate < 50;
               const barColor = rate >= 80 ? 'bg-emerald-500' : rate >= 60 ? 'bg-amber-500' : 'bg-rose-500';
@@ -294,6 +302,59 @@ export const ComplianceTable: React.FC<ComplianceTableProps> = ({ complianceList
             })}
           </tbody>
         </table>
+      </div>
+
+      
+      {/* Pagination */}
+      <div className="flex flex-col sm:flex-row items-center justify-between pt-3 mt-2 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 gap-2 mb-4">
+        <div className="flex items-center space-x-4">
+          <span>Showing {paginated.length} of {sorted.length} records</span>
+          <div className="flex items-center space-x-2">
+            <span>Rows:</span>
+            <select
+              value={itemsPerPage}
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-1 py-0.5 text-slate-700 dark:text-slate-300 focus:outline-none cursor-pointer"
+            >
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={30}>30</option>
+              <option value={50}>50</option>
+            </select>
+          </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            className="px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700 disabled:opacity-50 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800"
+          >
+            Prev
+          </button>
+          <div className="flex items-center space-x-1">
+            <span>Page</span>
+            <select
+              value={currentPage}
+              onChange={(e) => setCurrentPage(Number(e.target.value))}
+              className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-1 py-0.5 text-slate-700 dark:text-slate-300 focus:outline-none font-semibold cursor-pointer"
+            >
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+                <option key={p} value={p}>{p}</option>
+              ))}
+            </select>
+            <span>of {totalPages}</span>
+          </div>
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            className="px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700 disabled:opacity-50 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800"
+          >
+            Next
+          </button>
+        </div>
       </div>
 
       {/* Interactive Drill-Down Inspection Modal */}
@@ -394,20 +455,22 @@ export const ComplianceTable: React.FC<ComplianceTableProps> = ({ complianceList
                 </div>
               </div>
 
+              
               {/* Assigned Veterinary Officer Card */}
               <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/60 text-xs space-y-1.5">
                 <div className="flex justify-between items-center font-bold text-slate-900 dark:text-white">
                   <span>District Veterinary Office: {drilledWoreda.woreda} Station</span>
-                  <span className="text-slate-500 font-normal">HRVL Field Post #14</span>
+                  <span className="text-slate-500 font-normal">HRVL Field Post</span>
                 </div>
                 <div className="flex flex-wrap items-center justify-between text-slate-600 dark:text-slate-300 pt-1 border-t border-slate-200 dark:border-slate-700/60">
-                  <span>Assigned Officer: <b>Dr. Ahmed Hassan (Lead Vet)</b></span>
+                  <span>Assigned Officer: <b>{records?.find(r => r.woreda === drilledWoreda.woreda && r.reporter)?.reporter || 'Not Assigned'}</b></span>
                   <span className="flex items-center gap-1 font-mono text-emerald-600 dark:text-emerald-400">
                     <PhoneCall className="w-3 h-3" />
-                    <span>+251 915 882 100</span>
+                    <span>{records?.find(r => r.woreda === drilledWoreda.woreda && r.phone)?.phone || '*'}</span>
                   </span>
                 </div>
               </div>
+
 
               {/* Alert Status Banner */}
               {alertSentStatus && (
@@ -423,7 +486,7 @@ export const ComplianceTable: React.FC<ComplianceTableProps> = ({ complianceList
             <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2">
               <button
                 onClick={() => {
-                  setAlertSentStatus(`Automated SMS Escalation Alert dispatched to Dr. Ahmed Hassan (+251 915 882 100) for ${drilledWoreda.woreda} Woreda.`);
+                  setAlertSentStatus(`Automated SMS Escalation Alert dispatched to the Assigned Officer for ${drilledWoreda.woreda} Woreda.`);
                 }}
                 className="inline-flex items-center space-x-1.5 px-3 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs transition-colors cursor-pointer"
               >

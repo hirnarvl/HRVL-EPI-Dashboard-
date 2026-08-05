@@ -111,6 +111,7 @@ export default function App() {
   const [isSimulatorRunning, setIsSimulatorRunning] = useState(false);
   const [isPrintFriendlyMode, setIsPrintFriendlyMode] = useState(false);
   const [isPortraitMode, setIsPortraitMode] = useState(false);
+  const [activeTab, setActiveTab] = useState<'Dashboard' | 'Map' | 'Tables'>('Dashboard');
 
   // Modals
   const [isLogModalOpen, setIsLogModalOpen] = useState(false);
@@ -261,18 +262,18 @@ export default function App() {
     return (
       <div className={`min-h-screen font-sans transition-colors duration-200 bg-slate-100 dark:bg-slate-950 flex flex-col items-center justify-center p-4`}>
          <div className="text-center space-y-6 max-w-md bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800">
-            <div className="mx-auto h-16 w-16 rounded-xl bg-slate-900 border border-emerald-500/50 p-2 flex items-center justify-center shadow-lg shadow-emerald-600/20">
+            <div className="mx-auto h-16 w-16 rounded-xl bg-slate-900 border-2 border-emerald-500/50 p-1 flex items-center justify-center shadow-[0_4px_15px_rgba(16,185,129,0.4)] hover:shadow-[0_8px_25px_rgba(16,185,129,0.6)] transform hover:-translate-y-1 transition-all duration-300">
               <img 
                  src="/hrvl-emblem.png" 
                  alt="HRVL Emblem" 
                  referrerPolicy="no-referrer"
                  onError={(e) => {
                   const target = e.target as HTMLImageElement;
-                  if (!target.src.includes('1lf9LiV7nEwjPS9RuPS4rM9LuBk1vAbbD')) {
-                    target.src = 'https://lh3.googleusercontent.com/d/1lf9LiV7nEwjPS9RuPS4rM9LuBk1vAbbD';
+                  if (!target.src.includes('1B-I4DeFvksl-bfA9KXPemqmEx7efTI8C')) {
+                    target.src = 'https://lh3.googleusercontent.com/d/1B-I4DeFvksl-bfA9KXPemqmEx7efTI8C';
                   }
                 }}
-                className="w-full h-full object-contain" 
+                className="w-full h-full object-contain drop-shadow-[0_4px_6px_rgba(0,0,0,0.5)]" 
                />
             </div>
             <div>
@@ -371,6 +372,8 @@ export default function App() {
           isPrintFriendlyMode={isPrintFriendlyMode}
           isPortraitMode={isPortraitMode}
           onTogglePortraitMode={() => setIsPortraitMode(prev => !prev)}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
           isOnline={isOnline}
           cachedRecordsCount={records.length}
           onResetCache={handleResetCache}
@@ -386,21 +389,7 @@ export default function App() {
           : 'max-w-7xl px-4 sm:px-6 lg:px-8'
       }`}>
 
-        {/* HRVL Official Institutional Banner */}
-        <div className="w-full rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800/80 shadow-md bg-slate-900 relative group">
-          <img 
-            src="/hrvl-banner.jpg" 
-            alt="HRVL Regional Veterinary Diagnostic Laboratory Banner" 
-            referrerPolicy="no-referrer"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              if (!target.src.includes('1ljHsMIChZqPrhQu48JaLIuncTXP8FCGj')) {
-                target.src = 'https://lh3.googleusercontent.com/d/1ljHsMIChZqPrhQu48JaLIuncTXP8FCGj';
-              }
-            }}
-            className="w-full h-28 sm:h-36 md:h-44 lg:h-52 object-cover object-center group-hover:scale-[1.01] transition-transform duration-500" 
-          />
-        </div>
+        
 
         {/* Portrait Mode Field Banner */}
         {isPortraitMode && (
@@ -454,7 +443,10 @@ export default function App() {
           </div>
         )}
 
-        {/* KPI Cards & Zone Reporting Rates */}
+        
+        {activeTab === 'Dashboard' && (
+          <div className="space-y-6">
+            {/* KPI Cards & Zone Reporting Rates */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -481,21 +473,8 @@ export default function App() {
           />
         </motion.div>
 
-        {/* Interactive Outbreak Map */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.15, ease: 'easeOut' }}
-        >
-          <OutbreakMap
-            outbreaks={outbreaks}
-            records={filteredRecords}
-            darkMode={isPrintFriendlyMode ? false : darkMode}
-            selectedZone={filters.zone}
-          />
-        </motion.div>
-
-        {/* Reporting Trend Charts & Profile Simulator */}
+        
+            {/* Reporting Trend Charts & Profile Simulator */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -530,7 +509,33 @@ export default function App() {
           </motion.div>
         </div>
 
-        {/* Disease Summary & Outbreak Tables */}
+        
+          </div>
+        )}
+
+        {activeTab === 'Map' && (
+          <div className="space-y-6">
+            {/* Interactive Outbreak Map */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.15, ease: 'easeOut' }}
+        >
+          <OutbreakMap
+            outbreaks={outbreaks}
+            records={filteredRecords}
+            darkMode={isPrintFriendlyMode ? false : darkMode}
+            selectedZone={filters.zone}
+          />
+        </motion.div>
+
+        
+          </div>
+        )}
+
+        {activeTab === 'Tables' && (
+          <div className="space-y-6">
+            {/* Disease Summary & Outbreak Tables */}
         <div className={`grid gap-6 ${isPortraitMode ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -564,10 +569,13 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.6, ease: 'easeOut' }}
         >
-          <ComplianceTable complianceList={complianceList} />
+          <ComplianceTable complianceList={complianceList} records={filteredRecords} />
         </motion.div>
 
-        {/* Field Officer Sign-Off & Verification Stamp Block (Print Mode Only) */}
+        
+          </div>
+        )}
+  {/* Field Officer Sign-Off & Verification Stamp Block (Print Mode Only) */}
         {isPrintFriendlyMode && (
           <div className="mt-8 pt-6 border-t-2 border-slate-900 grid grid-cols-2 gap-8 text-xs">
             <div className="space-y-8">
@@ -585,10 +593,7 @@ export default function App() {
 
       </main>
 
-      {/* Footer Banner */}
-      <div className={isPrintFriendlyMode ? 'print:hidden' : ''}>
-        <FooterBanner />
-      </div>
+      
 
       {/* Modals */}
       <NewArrivalModal

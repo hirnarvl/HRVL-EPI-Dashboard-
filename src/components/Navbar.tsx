@@ -33,6 +33,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { UserCircle, LogOut } from 'lucide-react';
 
 interface NavbarProps {
+  activeTab?: 'Dashboard' | 'Map' | 'Tables';
+  setActiveTab?: (tab: 'Dashboard' | 'Map' | 'Tables') => void;
   darkMode: boolean;
   setDarkMode: (val: boolean | ((prev: boolean) => boolean)) => void;
   filters: FilterState;
@@ -79,7 +81,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   dataMinDate,
   dataMaxDate,
   onOpenAuthModal,
-  onOpenSupportModal
+  onOpenSupportModal,
+  activeTab = 'Dashboard',
+  setActiveTab
 }) => {
   const [soundEnabled, setSoundEnabled] = useState<boolean>(soundEngine.enabled);
   const { user, logout } = useAuth();
@@ -97,15 +101,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           
           {/* Brand & Logo */}
           <div className="flex items-center space-x-3">
-            <div className="h-11 w-11 rounded-xl bg-slate-900 border border-emerald-500/50 p-1 flex items-center justify-center shadow-md shadow-emerald-600/20 shrink-0">
+            <div className="h-11 w-11 rounded-xl bg-slate-900 border-2 border-emerald-500/50 p-0.5 flex items-center justify-center shadow-[0_4px_15px_rgba(16,185,129,0.4)] hover:shadow-[0_8px_25px_rgba(16,185,129,0.6)] transform hover:-translate-y-1 transition-all duration-300 shrink-0">
               <img 
                 src="/hrvl-emblem.png" 
                 alt="HRVL Emblem" 
                 referrerPolicy="no-referrer"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
-                  if (!target.src.includes('1lf9LiV7nEwjPS9RuPS4rM9LuBk1vAbbD')) {
-                    target.src = 'https://lh3.googleusercontent.com/d/1lf9LiV7nEwjPS9RuPS4rM9LuBk1vAbbD';
+                  if (!target.src.includes('1B-I4DeFvksl-bfA9KXPemqmEx7efTI8C')) {
+                    target.src = 'https://lh3.googleusercontent.com/d/1B-I4DeFvksl-bfA9KXPemqmEx7efTI8C';
                   }
                 }}
                 className="w-full h-full object-contain" 
@@ -154,6 +158,29 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </div>
           </div>
+
+          
+          {/* Navigation Tabs */}
+          {setActiveTab && (
+            <div className="flex bg-slate-100/80 dark:bg-slate-800/80 p-1 rounded-xl mx-2 shadow-inner border border-slate-200 dark:border-slate-700">
+              {(['Dashboard', 'Map', 'Tables'] as const).map(tab => (
+                <button
+                  key={tab}
+                  onClick={() => {
+                    soundEngine.playClick();
+                    setActiveTab(tab);
+                  }}
+                  className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 ${
+                    activeTab === tab
+                      ? 'bg-white dark:bg-slate-700 text-emerald-700 dark:text-emerald-400 shadow-sm'
+                      : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Quick Filters */}
           <div className="flex flex-wrap items-center gap-2">
