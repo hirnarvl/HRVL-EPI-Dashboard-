@@ -295,18 +295,18 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             )}
 
-            {/* External Resources Button */}
+            {/* Open Access Portals Button */}
             {onOpenExternalResources && (
               <button
                 onClick={() => {
                   soundEngine.playClick();
                   onOpenExternalResources();
                 }}
-                title="External Veterinary Information & Resources"
+                title="Open Access Portals for Veterinary Research & Epidemiology"
                 className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold text-indigo-900 bg-indigo-200 hover:bg-indigo-300 dark:text-indigo-100 dark:bg-indigo-600/80 dark:hover:bg-indigo-500 rounded-lg border border-indigo-500/50 shadow-xs transition-all cursor-pointer"
               >
                 <Globe className="w-3.5 h-3.5" />
-                <span>External Info Links</span>
+                <span>open access portal</span>
               </button>
             )}
 

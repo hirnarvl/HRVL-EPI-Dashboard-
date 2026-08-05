@@ -52,7 +52,13 @@ import { soundEngine } from './utils/sound';
 
 export default function App() {
   const { user, loading } = useAuth();
-  const [darkMode, setDarkMode] = useState<boolean>(true);
+  const [darkMode, setDarkMode] = useState<boolean>(() => {
+    const saved = localStorage.getItem('hrvl_theme');
+    if (saved !== null) {
+      return saved === 'dark';
+    }
+    return true;
+  });
   
   // Primary Dashboard State - Initialized from localStorage cache for field offline resilience
   const [records, setRecords] = useState<SurveillanceRecord[]>(loadCachedRecords);
@@ -123,14 +129,17 @@ export default function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
   const [isGoogleDriveOpen, setIsGoogleDriveOpen] = useState(false);
+  const [isExternalResourcesOpen, setIsExternalResourcesOpen] = useState(false);
   const [printableReport, setPrintableReport] = useState<NarrativeReport | null>(null);
 
-  // Toggle Dark Class on <html> element
+  // Toggle Dark Class on <html> element with persistent theme storage
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
+      localStorage.setItem('hrvl_theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
+      localStorage.setItem('hrvl_theme', 'light');
     }
   }, [darkMode]);
 
@@ -368,6 +377,7 @@ export default function App() {
           onOpenReportModal={() => setIsAIReportModalOpen(true)}
           onOpenAuthModal={() => setIsAuthModalOpen(true)}
           onOpenSupportModal={() => setIsSupportModalOpen(true)}
+          onOpenExternalResources={() => setIsExternalResourcesOpen(true)}
           onOpenGoogleDrive={() => setIsGoogleDriveOpen(true)}
           onExportAllCSV={handleExportAllCSV}
           onToggleSimulator={() => setIsSimulatorRunning(prev => !prev)}
@@ -597,7 +607,10 @@ export default function App() {
 
       </main>
 
-      
+      {/* Footer Banner at the bottom of all dashboards */}
+      {!isPrintFriendlyMode && (
+        <FooterBanner onOpenExternalResources={() => setIsExternalResourcesOpen(true)} />
+      )}
 
       {/* Modals */}
       <NewArrivalModal
@@ -644,6 +657,11 @@ export default function App() {
         onClose={() => setIsGoogleDriveOpen(false)}
         records={records}
         onImportRecords={handleImportRecords}
+      />
+
+      <ExternalResourcesModal
+        isOpen={isExternalResourcesOpen}
+        onClose={() => setIsExternalResourcesOpen(false)}
       />
     </div>
   );
