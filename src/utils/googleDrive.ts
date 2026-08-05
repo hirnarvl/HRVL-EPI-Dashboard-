@@ -85,6 +85,36 @@ export async function downloadDriveFile(accessToken: string, fileId: string): Pr
 }
 
 /**
+ * Download file content as ArrayBuffer from Google Drive.
+ * Automatically exports native Google Sheets to XLSX binary format.
+ */
+export async function downloadDriveFileArrayBuffer(
+  accessToken: string,
+  fileId: string,
+  mimeType?: string
+): Promise<ArrayBuffer> {
+  let url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`;
+
+  // If it's a native Google Sheet, export as OpenXML XLSX
+  if (mimeType === 'application/vnd.google-apps.spreadsheet') {
+    url = `https://www.googleapis.com/drive/v3/files/${fileId}/export?mimeType=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`;
+  }
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error?.message || `Failed to download file from Google Drive (${response.status})`);
+  }
+
+  return await response.arrayBuffer();
+}
+
+/**
  * Delete a file from Google Drive after explicit user confirmation.
  */
 export async function deleteDriveFile(accessToken: string, fileId: string, fileName: string): Promise<void> {
